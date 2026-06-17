@@ -1,0 +1,14 @@
+{
+  "vertex": "veil:blit_screen",
+  "fragment": "astrocraft:planetfog",
+  "textures": {
+    "DepthSampler": {
+      "type": "framebuffer",
+      "name": "minecraft:main:depth"
+    },
+    "ShadowDepthSampler": {
+      "type": "framebuffer",
+      "name": "astrocraft:shadowmap:depth"
+    }
+  }
+}

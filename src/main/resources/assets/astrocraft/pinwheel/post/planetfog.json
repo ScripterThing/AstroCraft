@@ -1,0 +1,10 @@
+{
+  "stages": [
+    {
+      "type": "veil:blit",
+      "shader": "astrocraft:planetfog",
+      "in": "minecraft:main",
+      "out": "veil:post"
+    }
+  ]
+}

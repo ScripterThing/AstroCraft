@@ -1,0 +1,41 @@
+{
+  "vertex": "veil:blit_screen",
+  "fragment": "astrocraft:shadows",
+  "textures": {
+    "DepthSampler": {
+      "type": "framebuffer",
+      "name": "minecraft:main:depth"
+    },
+    "ShadowDepthSampler": {
+      "type": "framebuffer",
+      "name": "astrocraft:shadowmap:depth"
+    },
+    "NormalSampler": {
+      "type": "framebuffer",
+      "name": "veil:dynamic_main",
+      "sampler": 2
+    },
+    "AlbedoSampler": {
+      "type": "framebuffer",
+      "name": "veil:dynamic_main",
+      "sampler": 1
+    },
+    "AlbedoDepthSampler": {
+      "type": "framebuffer",
+      "name": "veil:dynamic_main:depth"
+    },
+    "HandSampler": {
+      "type": "framebuffer",
+      "name": "veil:first_person",
+      "sampler": 1
+    },
+    "HandDepthSampler": {
+      "type": "framebuffer",
+      "name": "veil:first_person:depth"
+    },
+    "NoiseTex": {
+      "type": "location",
+      "location": "astrocraft:textures/shader/rnoise.png"
+    }
+  }
+}

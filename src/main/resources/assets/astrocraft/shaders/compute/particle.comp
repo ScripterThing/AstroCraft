@@ -1,0 +1,28 @@
+#version 430
+
+// Each workgroup will handle multiple particles
+layout(local_size_x = 256) in;
+
+// Particle structure: position + velocity
+struct Particle {
+    vec2 pos;
+    vec2 vel;
+};
+
+// Shader Storage Buffer Object (SSBO) binding 0
+layout(std430, binding = 0) buffer Particles {
+    Particle particles[];
+};
+
+uniform float deltaTime;
+
+void main() {
+    uint id = gl_GlobalInvocationID.x;
+
+    // Update position
+    particles[id].pos += particles[id].vel * deltaTime;
+
+    // Simple boundary reflection
+    if (particles[id].pos.x > 1.0 || particles[id].pos.x < -1.0) particles[id].vel.x *= -1.0;
+    if (particles[id].pos.y > 1.0 || particles[id].pos.y < -1.0) particles[id].vel.y *= -1.0;
+}

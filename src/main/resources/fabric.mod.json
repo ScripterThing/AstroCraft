@@ -1,0 +1,43 @@
+{
+	"schemaVersion": 1,
+	"id": "astrocraft",
+	"version": "${version}",
+	"name": "Astro Craft",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Cubikore"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/astrocraft/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.cubikore.astro.AstroCraft"
+		],
+        "client": [
+          "com.cubikore.astro.AstroCraftClient"
+        ],
+		"fabric-datagen": [
+			"com.cubikore.astro.AstroCraftDataGenerator"
+		]
+	},
+	"mixins": [
+		"astrocraft.mixins.json"
+	],
+	"depends": {
+		"veil": ">=4.1.2",
+		"imguimc": "1.1.0+mc1.21.1",
+		"handcrafted": ">=4.0.3",
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

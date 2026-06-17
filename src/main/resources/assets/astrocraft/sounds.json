@@ -1,0 +1,63 @@
+{
+  "wind": {
+    "sounds": [
+      {
+        "name": "astrocraft:wind",
+        "stream": true,
+        "loop": true
+      },
+      {
+        "name": "astrocraft:wind_s",
+        "stream": true,
+        "loop": true
+      },
+      {
+        "name": "astrocraft:wind_t",
+        "stream": true,
+        "loop": true
+      },
+      {
+        "name": "astrocraft:wind_f",
+        "stream": true,
+        "loop": true
+      }
+    ]
+  },
+  "wind_low": {
+    "sounds": [
+      {
+        "name": "astrocraft:wind_l",
+        "stream": true,
+        "loop": true
+      }
+    ]
+  },
+  "wind_high": {
+    "sounds": [
+      {
+        "name": "astrocraft:wind_h",
+        "stream": true,
+        "loop": true
+      }
+    ]
+  },
+  "water_drop": {
+    "sounds": [
+      {
+        "name": "astrocraft:drop1",
+        "stream": false,
+        "loop": true
+      },
+      {
+        "name": "astrocraft:drop2",
+        "stream": false,
+        "loop": true
+      },
+      {
+        "name": "astrocraft:drop3",
+        "stream": false,
+        "loop": true
+      }
+    ]
+  }
+}

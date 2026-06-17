@@ -1,0 +1,42 @@
+{
+  "stages": [
+    {
+      "type": "veil:blit",
+      "shader": "astrocraft:stars",
+      "in": "minecraft:main",
+      "out": "post_stars"
+    },
+    {
+      "type": "veil:blit",
+      "shader": "astrocraft:planets",
+      "in": "post_stars",
+      "out": "astrocraft:planet_buffer"
+    },
+    {
+      "type": "veil:blit",
+      "shader": "astrocraft:atmosphere",
+      "in": "astrocraft:planet_buffer",
+      "out": "post_planet"
+    },
+    {
+      "type": "veil:blit",
+      "shader": "astrocraft:fxaa",
+      "in": "post_planet",
+      "out": "veil:post"
+    }
+  ],
+  "framebuffers": {
+    "post_stars": {
+      "depth": true,
+      "format": "RGBA8",
+      "autoClear": false,
+      "linear": true
+    },
+    "post_planet": {
+      "depth": true,
+      "format": "RGBA8",
+      "autoClear": false,
+      "linear": true
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "astrocraft:block/captain_seat"
+    },
+    "facing=south": {
+      "model": "astrocraft:block/captain_seat",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "astrocraft:block/captain_seat",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "astrocraft:block/captain_seat",
+      "y": 90
+    }
+  }
+}

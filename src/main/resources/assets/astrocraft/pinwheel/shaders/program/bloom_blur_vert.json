@@ -1,0 +1,10 @@
+{
+  "vertex": "astrocraft:bloom_blur_vert",
+  "fragment": "astrocraft:bloom_blur",
+  "textures": {
+    "DepthSampler": {
+      "type": "framebuffer",
+      "name": "minecraft:main:depth"
+    }
+  }
+}

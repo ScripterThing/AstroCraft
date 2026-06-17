@@ -1,0 +1,48 @@
+{
+  "stages": [
+    {
+      "type": "veil:blit",
+      "shader": "astrocraft:bloom_cut",
+      "in": "minecraft:main",
+      "out": "separated"
+    },
+    {
+      "type": "veil:blit",
+      "shader": "astrocraft:bloom_blur",
+      "in": "separated",
+      "out": "blurred"
+    },
+    {
+      "type": "veil:blit",
+      "shader": "astrocraft:bloom_blur_vert",
+      "in": "blurred",
+      "out": "blurred_vert"
+    },
+    {
+      "type": "veil:blit",
+      "shader": "astrocraft:bloom",
+      "in": "blurred_vert",
+      "out": "veil:post"
+    }
+  ],
+  "framebuffers": {
+    "separated": {
+      "depth": false,
+      "format": "RGBA32F",
+      "autoClear": true,
+      "linear": true
+    },
+    "blurred": {
+      "depth": false,
+      "format": "RGBA8",
+      "autoClear": true,
+      "linear": true
+    },
+    "blurred_vert": {
+      "depth": false,
+      "format": "RGBA8",
+      "autoClear": true,
+      "linear": true
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "vertex": "astrocraft:shadowmap/entity",
+  "fragment": "astrocraft:shadowmap/rendertype_entity"
+}

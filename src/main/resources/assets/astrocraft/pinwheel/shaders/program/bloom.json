@@ -1,0 +1,10 @@
+{
+  "vertex": "veil:blit_screen",
+  "fragment": "astrocraft:bloom",
+  "textures": {
+    "MainSampler": {
+      "type": "framebuffer",
+      "name": "minecraft:main"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "vertex": "astrocraft:shadowmap/block",
+  "fragment": "astrocraft:shadowmap/rendertype_solid"
+}

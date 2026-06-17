@@ -1,0 +1,102 @@
+{
+  "vertex": "veil:blit_screen",
+  "fragment": "astrocraft:planets",
+
+  "textures": {
+    "DepthSampler": {
+      "type": "framebuffer",
+      "name": "minecraft:main:depth"
+    },
+    "EarthTex": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/earth/earth.png",
+      "filter": {
+        "blur": true
+      }
+    },
+    "EarthNormal": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/earth/earth_normal.png",
+      "filter": {
+        "blur": true
+      }
+    },
+    "EarthClouds": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/earth/earth_clouds.png",
+      "filter": {
+        "blur": true
+      }
+    },
+    "SaturnTex": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/saturn/saturn.png",
+      "filter": {
+        "blur": true
+      }
+    },
+    "SaturnRingTex": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/saturn/saturn_ring.png",
+      "filter": {
+        "blur": true
+      }
+    },
+    "VenusTex": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/venus/venus.png",
+      "filter": {
+        "blur": true
+      }
+    },
+    "VenusAtmosTex": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/venus/venus_atmosphere.png",
+      "filter": {
+        "blur": true
+      }
+    },
+    "JupiterTex": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/jupiter.png",
+      "filter": {
+        "blur": true
+      }
+    },
+    "MarsTex": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/mars.png",
+      "filter": {
+        "blur": true
+      }
+    },
+    "MercuryTex": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/mercury.png",
+      "filter": {
+        "blur": true
+      }
+    },
+    "NeptuneTex": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/neptune.png",
+      "filter": {
+        "blur": true
+      }
+    },
+    "UranusTex": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/uranus/uranus.png",
+      "filter": {
+        "blur": true
+      }
+    },
+    "UranusRingTex": {
+      "type": "location",
+      "location": "astrocraft:textures/planet/uranus/uranus_ring.png",
+      "filter": {
+        "blur": true
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "astrocraft:space_dim_type",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "astrocraft:space",
+      "lakes": false, "features": false,
+      "layers": [
+        {
+          "height": 384,
+          "block": "minecraft:air"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "astrocraft:venus_dim_type",
+  "generator": {
+    "type": "astrocraft:venus",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "astrocraft:venus"
+    }
+  }
+}

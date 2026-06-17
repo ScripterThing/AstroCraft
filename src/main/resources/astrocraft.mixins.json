@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "package": "com.cubikore.astro.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ExampleMixin",
+    "GameRendererMixin",
+    "ImGuiRendererGL33Mixin",
+    "MinecraftClientMixin",
+    "ParticleManagerAccessor",
+    "VoxelShadowGridMixin",
+    "WorldRendererAccessor",
+    "WorldRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "client": [
+    "CameraAccessor"
+	]
+}
