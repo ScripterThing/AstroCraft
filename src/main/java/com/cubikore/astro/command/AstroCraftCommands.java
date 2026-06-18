@@ -47,7 +47,7 @@ public class AstroCraftCommands {
                                                                         int duration = IntegerArgumentType.getInteger(context, "duration_ticks");
                                                                         float intensity = FloatArgumentType.getFloat(context, "intensity");
 
-                                                                        Identifier planetId = Universe.getPlanetFromName(planet);
+                                                                        Identifier planetId = Identifier.tryParse(planet);
 
                                                                         AstroCraft.weatherManager.setWeather(planetId, new PlanetWeather(type, duration, intensity));
 
@@ -67,18 +67,18 @@ public class AstroCraftCommands {
                             CommandManager.literal("executeFTLJump")
                                     .then(CommandManager.argument("target", StringArgumentType.word())
                                             .suggests(((context, builder) -> {
-                                                for(Planet planet : AstroCraft.universe.planets) {
-                                                    if((context.getInput().startsWith(planet.name) || context.getInput().isEmpty()) && !planet.name.equals("Sun"))
-                                                        builder.suggest(planet.name);
+                                                for(Planet planet : Universe.planets) {
+                                                    if(!planet.planetId.equals(Universe.SUN_ID))
+                                                        builder.suggest(planet.planetId.toString());
                                                 }
 
                                                 return builder.buildFuture();
                                             }))
                                             .executes(context -> {
-                                                String targetPlanetName = StringArgumentType.getString(context, "target");
+                                                String targetPlanetId = StringArgumentType.getString(context, "target");
 
-                                                Planet targetPlanet = AstroCraft.universe.getPlanet(targetPlanetName);
-                                                Planet sun = AstroCraft.universe.getPlanet("Sun");
+                                                Planet targetPlanet = Universe.getPlanet(Identifier.tryParse(targetPlanetId));
+                                                Planet sun = Universe.getPlanet(Universe.SUN_ID);
 
                                                 if(targetPlanet != null && sun != null) {
                                                     Vector3f sunPos = new Vector3f(sun.position[0], sun.position[1], sun.position[2]);

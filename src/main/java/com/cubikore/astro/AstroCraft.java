@@ -45,8 +45,6 @@ public class AstroCraft implements ModInitializer {
 
     public static WeatherManager weatherManager = new WeatherManager();
 
-    public static Universe universe = new Universe();
-
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Hello Fabric world!");
@@ -60,7 +58,7 @@ public class AstroCraft implements ModInitializer {
         AstroCraftSounds.registerSounds();
         AstroCraftChunkGenerators.registerChunkGenerators();
 
-        universe.init();
+        Universe.init();
 
         registerServerEvents();
 
@@ -70,15 +68,15 @@ public class AstroCraft implements ModInitializer {
 	}
 
     private static void initializePlanets() {
-        universe.add(new Planet(new Vector3f(-1030, 0, 0), 1000.0f, new Vector3f(1.0f), new Atmosphere(1.0f, 4f), "Earth"));
-        universe.add(new Planet(new Vector3f(200000, 0, 0), 3000f, new Vector3f(1.0f, 0.944f, 0.852f), new Atmosphere(54649.0f, 3.19f), "Sun"));
-        universe.add(new Planet(new Vector3f(93933, 0, 106066), 1000f, new Vector3f(1.0f), new Atmosphere(0, 3.19f), "Mercury"));
-        universe.add(new Planet(new Vector3f(30855, 0, -61563), 950f, new Vector3f(1.0f), new Atmosphere(0.5f, 3.19f, new Vector3f(483, 530, 669)), "Venus"));
-        universe.add(new Planet(new Vector3f(-75000, 0, -216506), 950f, new Vector3f(1.0f), new Atmosphere(0.5f, 3.19f, new Vector3f(546, 649, 643)), "Mars"));
-        universe.add(new Planet(new Vector3f(892820, 0, -400000), 10973f, new Vector3f(1.0f), new Atmosphere(0.3f, 3.19f, new Vector3f(700, 700, 642)), "Jupiter"));
-        universe.add(new Planet(new Vector3f(2337171, -10000, 923454), 9140f, new Vector3f(1.0f), new Atmosphere(0.3f, 4.0f, new Vector3f(700, 612, 554)), "Saturn"));
-        universe.add(new Planet(new Vector3f(2361192, 100000, 786646), 3865f, new Vector3f(1.0f), new Atmosphere(0.3f, 3.19f, new Vector3f(678, 700, 471)), "Uranus"));
-        universe.add(new Planet(new Vector3f(2278461, -300000, -1200000), 3865f, new Vector3f(1.0f), new Atmosphere(0.3f, 3.19f, new Vector3f(700, 554, 408)), "Neptune"));
+        Universe.addPlanet(new Planet(new Vector3f(-1030, 0, 0), 1000.0f, new Vector3f(1.0f), new Atmosphere(1.0f, 4f), Universe.EARTH_ID));
+        Universe.addPlanet(new Planet(new Vector3f(200000, 0, 0), 3000f, new Vector3f(1.0f, 0.944f, 0.852f), new Atmosphere(54649.0f, 3.19f), Universe.SUN_ID));
+        Universe.addPlanet(new Planet(new Vector3f(93933, 0, 106066), 1000f, new Vector3f(1.0f), new Atmosphere(0, 3.19f), Universe.MERCURY_ID));
+        Universe.addPlanet(new Planet(new Vector3f(30855, 0, -61563), 950f, new Vector3f(1.0f), new Atmosphere(0.5f, 3.19f, new Vector3f(483, 530, 669)), Universe.VENUS_ID));
+        Universe.addPlanet(new Planet(new Vector3f(-75000, 0, -216506), 950f, new Vector3f(1.0f), new Atmosphere(0.5f, 3.19f, new Vector3f(546, 649, 643)), Universe.MARS_ID));
+        Universe.addPlanet(new Planet(new Vector3f(892820, 0, -400000), 10973f, new Vector3f(1.0f), new Atmosphere(0.3f, 3.19f, new Vector3f(700, 700, 642)), Universe.JUPITER_ID));
+        Universe.addPlanet(new Planet(new Vector3f(2337171, -10000, 923454), 9140f, new Vector3f(1.0f), new Atmosphere(0.3f, 4.0f, new Vector3f(700, 612, 554)), Universe.SATURN_ID));
+        Universe.addPlanet(new Planet(new Vector3f(2361192, 100000, 786646), 3865f, new Vector3f(1.0f), new Atmosphere(0.3f, 3.19f, new Vector3f(678, 700, 471)), Universe.URANUS_ID));
+        Universe.addPlanet(new Planet(new Vector3f(2278461, -300000, -1200000), 3865f, new Vector3f(1.0f), new Atmosphere(0.3f, 3.19f, new Vector3f(700, 554, 408)), Universe.NEPTUNE_ID));
 
         weatherManager.add(Universe.MERCURY_ID, PlanetWeather.getClear());
         weatherManager.add(Universe.VENUS_ID, new PlanetWeather("clear", 200, 1));
@@ -94,7 +92,7 @@ public class AstroCraft implements ModInitializer {
         });
 
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
-            Identifier from = AstroCraft.universe.getPlanetIdFromWorld(origin.getRegistryKey());
+            Identifier from = Universe.getPlanetIdFromWorld(origin.getRegistryKey());
             weatherManager.sendWeatherState(player, true, from);
         });
 
@@ -118,7 +116,7 @@ public class AstroCraft implements ModInitializer {
 
             float closestSurface = Float.MAX_VALUE;
 
-            for(Planet planet : universe.planets) {
+            for(Planet planet : Universe.planets) {
                 float dst = shipPos.distance(new Vector3f(planet.position[0], planet.position[1], planet.position[2])) - planet.radius[0];
 
                 if(dst < closestSurface) {

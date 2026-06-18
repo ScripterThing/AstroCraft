@@ -5,6 +5,7 @@ import com.cubikore.astro.client.ClientStorage;
 import com.cubikore.astro.gui.AstroCraftSprites;
 import com.cubikore.astro.networking.payload.ShipCommandPayload;
 import com.cubikore.astro.universe.Planet;
+import com.cubikore.astro.universe.Universe;
 import com.cubikore.astro.util.VectorMath;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -23,14 +24,14 @@ import java.util.List;
 public class ControlPanelScreen extends Screen {
     public static Text TITLE = Text.literal("Control Panel");
 
-    private List<String> planetList = new ArrayList<>();
+    private List<Identifier> planetList = new ArrayList<>();
 
     public ControlPanelScreen() {
         super(TITLE);
 
-        for(Planet planet : AstroCraft.universe.planets) {
-            if(!planet.name.equals("Sun"))
-                planetList.add(planet.name);
+        for(Planet planet : Universe.planets) {
+            if(!planet.planetId.equals(Universe.SUN_ID))
+                planetList.add(planet.planetId);
         }
     }
 
@@ -45,16 +46,16 @@ public class ControlPanelScreen extends Screen {
         );
     }
 
-    private Vector2f getRadiusAndAngle(String planetName) {
-        return switch (planetName) {
-            case "Mercury" -> new Vector2f(60f, -30f);
-            case "Venus" -> new Vector2f(80f, 30f);
-            case "Earth" -> new Vector2f(120f, 0f);
-            case "Mars" -> new Vector2f(150f, 45f);
-            case "Jupiter" -> new Vector2f(170f, 120f);
-            case "Saturn" -> new Vector2f(150f, -90f);
-            case "Uranus" -> new Vector2f(170f, -140f);
-            case "Neptune" -> new Vector2f(200f, -180);
+    private Vector2f getRadiusAndAngle(String planetId) {
+        return switch (planetId) {
+            case "astrocraft:mercury" -> new Vector2f(60f, -30f);
+            case "astrocraft:venus" -> new Vector2f(80f, 30f);
+            case "astrocraft:earth" -> new Vector2f(120f, 0f);
+            case "astrocraft:mars" -> new Vector2f(150f, 45f);
+            case "astrocraft:jupiter" -> new Vector2f(170f, 120f);
+            case "astrocraft:saturn" -> new Vector2f(150f, -90f);
+            case "astrocraft:uranus" -> new Vector2f(170f, -140f);
+            case "astrocraft:neptune" -> new Vector2f(200f, -180);
             default -> new Vector2f(0, 0);
         };
     }
@@ -80,23 +81,20 @@ public class ControlPanelScreen extends Screen {
 
         context.drawText(this.textRenderer, aupt, this.width - aw - 40, 20, 0xffffff, true);
 
-
-        for(String planetName : planetList) {
-            Identifier sprite = AstroCraftSprites.getSpriteFromPlanetName(planetName);
-
-            Vector2f p = getRadiusAndAngle(planetName);
+        for(Identifier planetId : planetList) {
+            Vector2f p = getRadiusAndAngle(planetId.toString());
             float radius = p.x / 1.5f;
             float angle = p.y + 90 + ClientStorage.renderedWorldOffset.w;
 
             Vector2f orbitPos = VectorMath.orbit(angle, radius);
             orbitPos.add((float) this.width / 2, (float) this.height / 2);
 
-            context.drawGuiTexture(sprite, (int) (orbitPos.x - 8), (int) (orbitPos.y - 8), 16, 16);
+            context.drawGuiTexture(planetId, (int) (orbitPos.x - 8), (int) (orbitPos.y - 8), 16, 16);
 
             if(mouseX >= orbitPos.x - 10 && mouseY >= orbitPos.y - 10 && mouseX <= orbitPos.x + 10 && mouseY <= orbitPos.y + 10) {
                 context.drawGuiTexture(AstroCraftSprites.PLANET_SELECT_SPRITE, (int) (orbitPos.x - 10), (int) (orbitPos.y - 10), 20, 20);
 
-                context.drawTooltip(this.textRenderer, Text.literal(planetName), mouseX, mouseY);
+                context.drawTooltip(this.textRenderer, Text.translatable(planetId.toTranslationKey()), mouseX, mouseY);
             }
         }
 
@@ -105,8 +103,8 @@ public class ControlPanelScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        for(String planetName : planetList) {
-            Vector2f p = getRadiusAndAngle(planetName);
+        for(Identifier planetId : planetList) {
+            Vector2f p = getRadiusAndAngle(planetId.toString());
             float radius = p.x / 1.5f;
             float angle = p.y + 90 + ClientStorage.renderedWorldOffset.w;
 
@@ -114,7 +112,7 @@ public class ControlPanelScreen extends Screen {
             orbitPos.add((float) this.width / 2, (float) this.height / 2);
 
             if(mouseX >= orbitPos.x - 10 && mouseY >= orbitPos.y - 10 && mouseX <= orbitPos.x + 10 && mouseY <= orbitPos.y + 10) {
-                this.ftlJumpPressed(planetName);
+                this.ftlJumpPressed(planetId.toString());
             }
         }
 

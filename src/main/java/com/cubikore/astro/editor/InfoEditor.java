@@ -7,35 +7,43 @@ import foundry.veil.api.client.editor.SingleWindowInspector;
 import imgui.ImGui;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 
 public class InfoEditor extends SingleWindowInspector {
     @Override
     protected void renderComponents() {
-        ImGui.text("World Offset:");
-        ImGui.indent();
-        ImGui.text("x: " + ClientStorage.renderedWorldOffset.x);
-        ImGui.text("y: " + ClientStorage.renderedWorldOffset.y);
-        ImGui.text("z: " + ClientStorage.renderedWorldOffset.z);
-        ImGui.text("yaw: " + ClientStorage.renderedWorldOffset.w);
-        ImGui.unindent();
+        World world = MinecraftClient.getInstance().world;
+        if(world != null) {
+            ImGui.text("World Offset:");
+            ImGui.indent();
+            ImGui.text("x: " + ClientStorage.renderedWorldOffset.x);
+            ImGui.text("y: " + ClientStorage.renderedWorldOffset.y);
+            ImGui.text("z: " + ClientStorage.renderedWorldOffset.z);
+            ImGui.text("yaw: " + ClientStorage.renderedWorldOffset.w);
+            ImGui.unindent();
 
-        ClientWeather weather = AstroCraftClient.weatherManager.get(MinecraftClient.getInstance().world.getRegistryKey());
+            ClientWeather weather = AstroCraftClient.weatherManager.get(MinecraftClient.getInstance().world.getRegistryKey());
 
-        ImGui.text("Atmosphere Conditions");
-        ImGui.indent();
-        ImGui.text("hasFog: " + weather.currentAtmosphereConditions.hasFog);
-        ImGui.text("fogDistance: " + weather.currentAtmosphereConditions.fogDistance);
-        ImGui.text("lightDarkFactor: " + weather.currentAtmosphereConditions.lightDarkFactor);
-        ImGui.unindent();
+            if(weather != null) {
+                ImGui.text("Atmosphere Conditions");
+                ImGui.indent();
+                ImGui.text("hasFog: " + weather.currentAtmosphereConditions.hasFog);
+                ImGui.text("fogDistance: " + weather.currentAtmosphereConditions.fogDistance);
+                ImGui.text("lightDarkFactor: " + weather.currentAtmosphereConditions.lightDarkFactor);
+                ImGui.text("fogColor: " + weather.currentAtmosphereConditions.fogColor[0] + ", " + weather.currentAtmosphereConditions.fogColor[1] + ", " + weather.currentAtmosphereConditions.fogColor[2]);
+                ImGui.text("fogDarkColor: " + weather.currentAtmosphereConditions.fogDarkColor[0] + ", " + weather.currentAtmosphereConditions.fogDarkColor[1] + ", " + weather.currentAtmosphereConditions.fogDarkColor[2]);
+                ImGui.unindent();
+            }
 
-        ImGui.dragFloat3("World Render Offset", ClientStorage.terrainOffset);
+            ImGui.dragFloat3("World Render Offset", ClientStorage.terrainOffset);
 
-        ImGui.text("Lighting");
-        ImGui.indent();
-        ImGui.dragFloat2("Sun Orientation", ClientStorage.sunOrientation);
-        ImGui.colorPicker3("Sun Color", ClientStorage.sunColor);
-        ImGui.text("Brightness: " + ClientStorage.sunBrightness[0]);
-        ImGui.unindent();
+            ImGui.text("Lighting");
+            ImGui.indent();
+            ImGui.dragFloat2("Sun Orientation", ClientStorage.sunOrientation);
+            ImGui.colorPicker3("Sun Color", ClientStorage.sunColor);
+            ImGui.text("Brightness: " + ClientStorage.sunBrightness[0]);
+            ImGui.unindent();
+        }
     }
 
     @Override

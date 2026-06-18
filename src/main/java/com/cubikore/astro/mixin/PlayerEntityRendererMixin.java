@@ -1,6 +1,7 @@
 package com.cubikore.astro.mixin;
 
 import com.cubikore.astro.dimension.DimensionKeys;
+import com.cubikore.astro.universe.Universe;
 import com.cubikore.astro.util.PlayerLightAccess;
 import foundry.veil.api.client.render.VeilRenderSystem;
 import foundry.veil.api.client.render.light.data.PointLightData;
@@ -56,7 +57,7 @@ public class PlayerEntityRendererMixin {
                     access.getLightHandle().getLightData().setPosition(pos.x, clientPlayerEntity.getEyeY(), pos.z);
                 }
 
-                if(!world.getRegistryKey().equals(DimensionKeys.SPACE_DIM)) {
+                if(!DimensionKeys.isSpace(world)) {
                     BlockPos pPos = clientPlayerEntity.getBlockPos();
                     BlockPos pos = new BlockPos(pPos.getX(), pPos.getY() + 1, pPos.getZ());
 
@@ -66,6 +67,9 @@ public class PlayerEntityRendererMixin {
                         lightData.setBrightness(1);
                     else
                         lightData.setBrightness(0);
+                }
+                else {
+                    lightData.setBrightness(0);
                 }
             }
         }

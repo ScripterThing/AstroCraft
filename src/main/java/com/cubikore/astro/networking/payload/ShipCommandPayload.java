@@ -35,7 +35,7 @@ public record ShipCommandPayload(String commandType, String param) implements Cu
         String param = payload.param();
 
         if(command.equals("ftl_jump")) {
-            AstroCraftShip.doFTLJump(context.server(), param);
+            AstroCraftShip.doFTLJump(context.server(), Identifier.tryParse(param));
         }
         else if(command.equals("auto_thrust")) {
             AstroCraftShip.toggleAutoThrust();

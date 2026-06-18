@@ -22,8 +22,11 @@ public class ClientWeather {
 
     protected boolean renderClouds = true;
 
+    public final String weatherName;
+
     public ClientWeather(String weatherName) {
         System.out.println(weatherName);
+        this.weatherName = weatherName;
         supportedTypes.add("clear");
     }
 

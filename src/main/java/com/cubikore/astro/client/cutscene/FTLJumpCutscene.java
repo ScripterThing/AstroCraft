@@ -52,7 +52,7 @@ public class FTLJumpCutscene extends AstCutscene{
         float sceneTime = getProgress();
 
         if(cameraEntity != null && player != null) {
-            if(player.getWorld().getRegistryKey().equals(DimensionKeys.SPACE_DIM)) {
+            if(DimensionKeys.inSpace(player)) {
                 client.options.hudHidden = true;
 
                 if(firstAngle && !secondAngle) {
@@ -96,7 +96,7 @@ public class FTLJumpCutscene extends AstCutscene{
     @Override
     protected void setUpCamera() {
         ClientPlayerEntity player = client.player;
-        if(player != null && player.getWorld().getRegistryKey().equals(DimensionKeys.SPACE_DIM)) {
+        if(player != null && DimensionKeys.inSpace(player)) {
             createCamera(player);
             cameraSetUp = true;
         }

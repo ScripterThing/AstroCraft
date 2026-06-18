@@ -7,15 +7,15 @@ public class Planet {
     public float[] position, color;
     public float[] radius;
 
-    public String name;
+    public Identifier planetId;
 
     public Atmosphere atmosphere;
 
-    public Planet(Vector3f position, float radius, Vector3f color, Atmosphere atmosphere, String name) {
+    public Planet(Vector3f position, float radius, Vector3f color, Atmosphere atmosphere, Identifier planetId) {
         this.position = new float[]{position.x, position.y, position.z};
         this.color = new float[]{color.x, color.y, color.z};
         this.radius = new float[]{radius};
         this.atmosphere = atmosphere;
-        this.name = name;
+        this.planetId = planetId;
     }
 }

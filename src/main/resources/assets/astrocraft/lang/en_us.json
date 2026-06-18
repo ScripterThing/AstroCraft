@@ -3,5 +3,14 @@
   "block.astrocraft.venusian_sand": "Venusian Sand",
   "block.astrocraft.reinforced_glass": "Reinforced Glass",
   "block.astrocraft.iron_oxide": "Iron Oxide Powder",
-  "block.astrocraft.bright_light_block": "Bright Light"
+  "block.astrocraft.bright_light_block": "Bright Light",
+
+  "astrocraft.sun": "Sun",
+  "astrocraft.mercury": "Mercury",
+  "astrocraft.venus": "Venus",
+  "astrocraft.earth": "Earth",
+  "astrocraft.mars": "Mars",
+  "astrocraft.jupiter": "Jupiter",
+  "astrocraft.uranus": "Uranus",
+  "astrocraft.neptune": "Neptune"
 }

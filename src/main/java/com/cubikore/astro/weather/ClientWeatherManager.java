@@ -1,6 +1,7 @@
 package com.cubikore.astro.weather;
 
 import com.cubikore.astro.AstroCraft;
+import com.cubikore.astro.universe.Universe;
 import com.cubikore.astro.weather.planet.ClientWeather;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
@@ -49,7 +50,7 @@ public class ClientWeatherManager {
     }
 
     public ClientWeather get(RegistryKey<World> dimKey) {
-        ClientWeather result = get(AstroCraft.universe.getPlanetIdFromWorld(dimKey));
+        ClientWeather result = get(Universe.getPlanetIdFromWorld(dimKey));
 
         if(result != null)
             return result;

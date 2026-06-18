@@ -58,7 +58,7 @@ public class WorldRendererMixin {
     private void skipCloudRendering(MatrixStack matrices, Matrix4f matrix4f, Matrix4f matrix4f2, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci) {
         ClientWeather weather = AstroCraftClient.weatherManager.get(client.world.getRegistryKey());
 
-        if(this.client.world.getRegistryKey().equals(DimensionKeys.SPACE_DIM) || !weather.canRenderClouds())
+        if(DimensionKeys.isSpace(client.world) || !weather.canRenderClouds())
             ci.cancel();
     }
 

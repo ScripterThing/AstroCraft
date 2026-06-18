@@ -4,11 +4,13 @@ import com.cubikore.astro.AstroCraft;
 import com.cubikore.astro.networking.payload.FTLJumpPayload;
 import com.cubikore.astro.server.ServerStorage;
 import com.cubikore.astro.universe.Planet;
+import com.cubikore.astro.universe.Universe;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -20,9 +22,9 @@ public class AstroCraftShip {
 
     public static Vector4f ftlJumpDestination = new Vector4f();
 
-    public static void doFTLJump(MinecraftServer server, String destination) {
-        Planet targetPlanet = AstroCraft.universe.getPlanet(destination);
-        Planet sun = AstroCraft.universe.getPlanet("Sun");
+    public static void doFTLJump(MinecraftServer server, Identifier destination) {
+        Planet targetPlanet = Universe.getPlanet(destination);
+        Planet sun = Universe.getPlanet(Universe.SUN_ID);
 
         autoThrust = false;
 

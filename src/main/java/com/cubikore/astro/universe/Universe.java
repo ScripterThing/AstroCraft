@@ -14,8 +14,11 @@ import java.util.Map;
 
 public class Universe {
     public static Identifier SPACE_ID = planetId("space");
-    public static Identifier MERCURY_ID = planetId("mercury");
     public static Identifier VENUS_ID = planetId("venus");
+
+    public static Identifier SUN_ID = planetId("sun");
+
+    public static Identifier MERCURY_ID = planetId("mercury");
     public static Identifier EARTH_ID = planetId("earth");
     public static Identifier MARS_ID = planetId("mars");
     public static Identifier JUPITER_ID = planetId("jupiter");
@@ -23,38 +26,35 @@ public class Universe {
     public static Identifier URANUS_ID = planetId("uranus");
     public static Identifier NEPTUNE_ID = planetId("neptune");
 
-    private Map<RegistryKey<World>, Identifier> planetMap = new HashMap<>();
-
-    public List<Planet> planets = new ArrayList<>();
+    public static List<Planet> planets = new ArrayList<>();
 
     private static Identifier planetId(String name) {
         return Identifier.of(AstroCraft.MOD_ID, name);
     }
 
-    public void init() {
-        planetMap.put(DimensionKeys.SPACE_DIM, SPACE_ID);
-
-        planetMap.put(DimensionKeys.VENUS_DIM, VENUS_ID);
-
-        planetMap.put(World.OVERWORLD, EARTH_ID);
-        planetMap.put(World.NETHER, EARTH_ID);
-        planetMap.put(World.END, EARTH_ID);
+    public static void init() {
+        AstroCraft.LOGGER.info("Initializing universe for astrocraft");
+        DimensionKeys.addDimension(SPACE_ID);
     }
 
-    public void add(Planet planet) {
+    public static void addPlanet(Planet planet) {
         planets.add(planet);
+
+        if(!planet.planetId.equals(EARTH_ID)) {
+            DimensionKeys.addDimension(planet.planetId);
+        }
     }
 
-    public Planet getPlanet(String name) {
+    public static Planet getPlanet(Identifier id) {
         for(Planet planet : planets) {
-            if(planet.name.equals(name))
+            if(planet.planetId.equals(id))
                 return planet;
         }
 
         return null;
     }
 
-    public Planet getClosestPlanet(Vector3f pos) {
+    public static Planet getClosestPlanet(Vector3f pos) {
         Planet closestPlanet = null;
         float closest = Float.POSITIVE_INFINITY;
         for(Planet planet : planets) {
@@ -68,22 +68,10 @@ public class Universe {
         return closestPlanet;
     }
 
-    public static Identifier getPlanetFromName(String name) {
-        return switch (name) {
-            case "space" -> SPACE_ID;
-            case "mercury" -> MERCURY_ID;
-            case "venus" -> VENUS_ID;
-            case "earth" -> EARTH_ID;
-            case "mars" -> MARS_ID;
-            case "jupiter" -> JUPITER_ID;
-            case "saturn" -> SATURN_ID;
-            case "uranus" -> NEPTUNE_ID;
-            case "neptune" -> URANUS_ID;
-            default -> null;
-        };
-    }
-
-    public Identifier getPlanetIdFromWorld(RegistryKey<World> dimensionKey) {
-        return planetMap.getOrDefault(dimensionKey, null);
+    public static Identifier getPlanetIdFromWorld(RegistryKey<World> dimensionKey) {
+        return dimensionKey.equals(World.OVERWORLD)
+                || dimensionKey.equals(World.NETHER)
+                || dimensionKey.equals(World.END)
+                ? EARTH_ID : DimensionKeys.getPlanetId(dimensionKey);
     }
 }

@@ -3,6 +3,7 @@ package com.cubikore.astro.editor;
 import com.cubikore.astro.AstroCraft;
 import com.cubikore.astro.universe.Atmosphere;
 import com.cubikore.astro.universe.Planet;
+import com.cubikore.astro.universe.Universe;
 import foundry.veil.api.client.editor.SingleWindowInspector;
 import imgui.ImGui;
 import net.minecraft.client.MinecraftClient;
@@ -18,22 +19,22 @@ public class PlanetEditor extends SingleWindowInspector {
 
     @Override
     protected void renderComponents() {
-        AstroCraft.universe.planets.removeAll(pendingRemove);
+        Universe.planets.removeAll(pendingRemove);
         pendingRemove.clear();
 
-        if(ImGui.button("Add Planet")) {
-            if(AstroCraft.universe.planets.size() < 32) {
-                MinecraftClient client = MinecraftClient.getInstance();
-                Vec3d pos = client.player.getPos();
-                AstroCraft.universe.add(new Planet(new Vector3f((float)pos.x, (float)pos.y, (float)pos.z), 1.0f, new Vector3f(1.0f), new Atmosphere(2.0f, 3.19f), "planet"));
-            }
-        }
+//        if(ImGui.button("Add Planet")) {
+//            if(Universe.planets.size() < 32) {
+//                MinecraftClient client = MinecraftClient.getInstance();
+//                Vec3d pos = client.player.getPos();
+//                Universe.addPlanet(new Planet(new Vector3f((float)pos.x, (float)pos.y, (float)pos.z), 1.0f, new Vector3f(1.0f), new Atmosphere(2.0f, 3.19f), "planet"));
+//            }
+//        }
 
         int i = 0;
-        for(Planet planet : AstroCraft.universe.planets) {
+        for(Planet planet : Universe.planets) {
             ImGui.pushID(i);
 
-            ImGui.text(planet.name);
+            ImGui.text(planet.planetId.toString());
             ImGui.indent();
 
             ImGui.dragFloat3("Position", planet.position, 0.1f);

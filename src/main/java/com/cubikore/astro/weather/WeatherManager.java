@@ -2,6 +2,7 @@ package com.cubikore.astro.weather;
 
 import com.cubikore.astro.AstroCraft;
 import com.cubikore.astro.networking.payload.WeatherChangedPayload;
+import com.cubikore.astro.universe.Universe;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
@@ -22,7 +23,7 @@ public class WeatherManager {
                 dirty = false;
 
                 for(ServerPlayerEntity player : PlayerLookup.all(server)) {
-                    Identifier from = AstroCraft.universe.getPlanetIdFromWorld(player.getWorld().getRegistryKey());
+                    Identifier from = Universe.getPlanetIdFromWorld(player.getWorld().getRegistryKey());
                     sendWeatherState(player, false, from);
                 }
             }
@@ -31,7 +32,7 @@ public class WeatherManager {
                 planetWeatherMap.replace(planetId, PlanetWeather.getClear());
 
                 for(ServerPlayerEntity player : PlayerLookup.all(server)) {
-                    Identifier from = AstroCraft.universe.getPlanetIdFromWorld(player.getWorld().getRegistryKey());
+                    Identifier from = Universe.getPlanetIdFromWorld(player.getWorld().getRegistryKey());
                     sendWeatherState(player, false, from);
                 }
             }
@@ -41,7 +42,7 @@ public class WeatherManager {
     }
 
     public void sendWeatherState(ServerPlayerEntity player, boolean planetChanged, Identifier fromPlanetName) {
-        Identifier planetId = AstroCraft.universe.getPlanetIdFromWorld(player.getWorld().getRegistryKey());
+        Identifier planetId = Universe.getPlanetIdFromWorld(player.getWorld().getRegistryKey());
         PlanetWeather weather = AstroCraft.weatherManager.getWeather(planetId);
 
         String json = AstroCraft.gson.toJson(weather);

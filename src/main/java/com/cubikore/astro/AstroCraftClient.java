@@ -130,7 +130,8 @@ public class AstroCraftClient implements ClientModInitializer {
         });
 
         ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register(((client, world) -> {
-            boolean inSpace = world.getRegistryKey().equals(DimensionKeys.SPACE_DIM);
+            boolean inSpace = DimensionKeys.isSpace(world);
+            System.out.println(inSpace);
 
             if(!inSpace) {
                 removeAllLights();
@@ -186,10 +187,10 @@ public class AstroCraftClient implements ClientModInitializer {
 
         ClientPlayerEntity player = client.player;
 
-        Planet sun = AstroCraft.universe.getPlanet("Sun");
+        Planet sun = Universe.getPlanet(Universe.SUN_ID);
 
         if(sun != null && player != null) {
-            boolean inSpace = client.world.getRegistryKey().equals(DimensionKeys.SPACE_DIM);
+            boolean inSpace = DimensionKeys.inSpace(player);
 
             if(inSpace) {
 
@@ -240,7 +241,7 @@ public class AstroCraftClient implements ClientModInitializer {
         }
 
         PlanetWeather currentWeather = ClientStorage.currentWeather;
-        Identifier planetId = AstroCraft.universe.getPlanetIdFromWorld(player.getWorld().getRegistryKey());
+        Identifier planetId = Universe.getPlanetIdFromWorld(player.getWorld().getRegistryKey());
 
         weatherManager.changed(planetId, currentWeather.getType(), planetChanged);
 
@@ -301,11 +302,10 @@ public class AstroCraftClient implements ClientModInitializer {
         }));
 
         VeilEventPlatform.INSTANCE.preVeilPostProcessing(((pipelineName, postPipeline, context) -> {
-            if(client.world != null) {
+            if(client.world != null && client.player != null) {
                 ClientWeather weather = weatherManager.get(client.world.getRegistryKey());
 
-                boolean inSpace = client.world.getRegistryKey().equals(DimensionKeys.SPACE_DIM);
-                boolean onVenus = client.world.getRegistryKey().equals(DimensionKeys.VENUS_DIM);
+                boolean inSpace = DimensionKeys.inSpace(client.player);
 
                 float gameTime = getGameTime();
 
@@ -347,7 +347,7 @@ public class AstroCraftClient implements ClientModInitializer {
 
                             planetFogShader.getUniformSafe("pointLightCount").setInt(0);
 
-                            ClientStorage.shaderLightsDirty = true;
+                            ClientStorage.shaderLightsDirty = false;
                         }
 
                         int i = 0;
@@ -398,13 +398,13 @@ public class AstroCraftClient implements ClientModInitializer {
                     }
 
                     if (planetShader != null) {
-                        planetShader.getUniformSafe("sphereCount").setInt(AstroCraft.universe.planets.size());
+                        planetShader.getUniformSafe("sphereCount").setInt(Universe.planets.size());
                         planetShader.getUniformSafe("gameTime").setFloat(gameTime);
                         planetShader.getUniformSafe("worldOffset").setVector(ClientStorage.renderedWorldOffset);
                         planetShader.getUniformSafe("shouldRender").setInt(inSpace ? 1 : 0);
 
-                        for (int i = 0; i < AstroCraft.universe.planets.size(); i++) {
-                            Planet planet = AstroCraft.universe.planets.get(i);
+                        for (int i = 0; i < Universe.planets.size(); i++) {
+                            Planet planet = Universe.planets.get(i);
 
                             planetShader.getUniformSafe("positions[" + i + "]").setVector(planet.position);
                             planetShader.getUniformSafe("radii[" + i + "]").setFloat(planet.radius[0]);
@@ -414,13 +414,13 @@ public class AstroCraftClient implements ClientModInitializer {
                     }
 
                     if (atmosphereShader != null) {
-                        atmosphereShader.getUniformSafe("sphereCount").setInt(AstroCraft.universe.planets.size());
+                        atmosphereShader.getUniformSafe("sphereCount").setInt(Universe.planets.size());
                         atmosphereShader.getUniformSafe("gameTime").setFloat(gameTime);
                         atmosphereShader.getUniformSafe("worldOffset").setVector(ClientStorage.renderedWorldOffset);
                         atmosphereShader.getUniformSafe("shouldRender").setInt(inSpace ? 1 : 0);
 
-                        for (int i = 0; i < AstroCraft.universe.planets.size(); i++) {
-                            Planet planet = AstroCraft.universe.planets.get(i);
+                        for (int i = 0; i < Universe.planets.size(); i++) {
+                            Planet planet = Universe.planets.get(i);
 
                             atmosphereShader.getUniformSafe("positions[" + i + "]").setVector(planet.position);
                             atmosphereShader.getUniformSafe("radii[" + i + "]").setFloat(planet.radius[0]);
