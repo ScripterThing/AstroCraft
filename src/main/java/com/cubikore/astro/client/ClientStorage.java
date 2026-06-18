@@ -2,7 +2,6 @@ package com.cubikore.astro.client;
 
 import com.cubikore.astro.client.light.PositionPointLightData;
 import com.cubikore.astro.weather.PlanetWeather;
-import foundry.veil.api.client.render.light.data.PointLightData;
 import foundry.veil.api.client.render.light.renderer.LightRenderHandle;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.noise.SimplexNoiseSampler;
@@ -34,5 +33,5 @@ public class ClientStorage {
     public static float[] sunColor = new float[]{0.988f, 0.921f, 0.662f};
     public static float[] sunBrightness = new float[]{1f};
 
-    public static LightRenderHandle<PointLightData> pointLightDataLightRenderHandle;
+    public static boolean shaderLightsDirty = false;
 }

@@ -21,15 +21,16 @@ import com.cubikore.astro.sound.VenusHighWindSoundInstance;
 import com.cubikore.astro.sound.VenusLowWindSoundInstance;
 import com.cubikore.astro.universe.Planet;
 import com.cubikore.astro.universe.Universe;
+import com.cubikore.astro.util.PlayerLightAccess;
 import com.cubikore.astro.weather.ClientWeatherManager;
 import com.cubikore.astro.weather.PlanetWeather;
 import com.cubikore.astro.weather.planet.ClientWeather;
-import com.cubikore.astro.weather.planet.VenusWeather;
+import com.cubikore.astro.weather.planet.VenusClientWeather;
 import foundry.veil.api.client.editor.EditorManager;
+import foundry.veil.api.client.registry.LightTypeRegistry;
 import foundry.veil.api.client.render.VeilRenderSystem;
 import foundry.veil.api.client.render.light.data.PointLightData;
 import foundry.veil.api.client.render.light.renderer.LightRenderHandle;
-import foundry.veil.api.client.render.light.renderer.LightRenderer;
 import foundry.veil.api.client.render.post.PostProcessingManager;
 import foundry.veil.api.client.render.rendertype.VeilRenderType;
 import foundry.veil.api.client.render.shader.program.ShaderProgram;
@@ -105,7 +106,7 @@ public class AstroCraftClient implements ClientModInitializer {
 
         weatherManager.add(Universe.SPACE_ID, new ClientWeather("space"));
         weatherManager.add(Universe.EARTH_ID, new ClientWeather("earth"));
-        weatherManager.add(Universe.VENUS_ID, new VenusWeather());
+        weatherManager.add(Universe.VENUS_ID, new VenusClientWeather());
 
         cutsceneManager.addScene(new FTLJumpCutscene());
     }
@@ -134,6 +135,11 @@ public class AstroCraftClient implements ClientModInitializer {
             if(!inSpace) {
                 removeAllLights();
             }
+
+            if(client.player != null) {
+                PlayerLightAccess access = (PlayerLightAccess) client.player;
+                access.removeLight();
+            }
         }));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -150,12 +156,6 @@ public class AstroCraftClient implements ClientModInitializer {
                 AstroCraftFluids.STILL_SULFURIC_ACID, AstroCraftFluids.FLOWING_SULFURIC_ACID,
                 new SimpleFluidRenderHandler(Identifier.ofVanilla("block/water_still"), Identifier.ofVanilla("block/water_flow"), 0xffd573)
         );
-
-//        WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-//            if(particleManager != null) {
-//                particleManager.renderParticles(context);
-//            }
-//        });
     }
 
     public static void removeAllLights() {
@@ -182,47 +182,13 @@ public class AstroCraftClient implements ClientModInitializer {
         ClientStorage.prevTerrainOffset[2] = ClientStorage.terrainOffset[2];
     }
 
-    private void setUpInvisLight() {
-        LightRenderer lightRenderer = VeilRenderSystem.renderer().getLightRenderer();
-
-        PointLightData pointLight = new PointLightData();
-        pointLight.setBrightness(0f);
-        pointLight.setPosition(0, 0, 0);
-
-        ClientStorage.pointLightDataLightRenderHandle = lightRenderer.addLight(pointLight);
-    }
-
     private void handleSunLight(MinecraftClient client) {
 
         ClientPlayerEntity player = client.player;
 
-//        if(sunLight == null || sunHandle == null) {
-//            sunLight = new AreaLightData();
-//            sunLight.setDistance(500);
-//            sunLight.setSize(500, 500);
-//            sunLight.setBrightness(3f);
-//            sunLight.setColor(0xe0c6ac);
-//            sunLight.setAngle((float) Math.toRadians(0.1f));
-//            sunLight.getPosition().set(200, 28, 0);
-//            sunLight.setOcclusionEnabled(true);
-//
-//            sunHandle = lightRenderer.addLight(sunLight);
-//        }
-
         Planet sun = AstroCraft.universe.getPlanet("Sun");
 
         if(sun != null && player != null) {
-            if(ClientStorage.pointLightDataLightRenderHandle == null) {
-                setUpInvisLight();
-            }
-            else if(!ClientStorage.pointLightDataLightRenderHandle.isValid()) {
-                setUpInvisLight();
-            }
-            else {
-                ClientStorage.pointLightDataLightRenderHandle.getLightData().setPosition(player.getX(), player.getEyeY(), player.getZ());
-                ClientStorage.pointLightDataLightRenderHandle.getLightData().setRadius(10f);
-            }
-
             boolean inSpace = client.world.getRegistryKey().equals(DimensionKeys.SPACE_DIM);
 
             if(inSpace) {
@@ -246,18 +212,6 @@ public class AstroCraftClient implements ClientModInitializer {
                 OI = Math.clamp(1f - OI, 0.1f, 1.0f);
 
                 ClientStorage.sunBrightness[0] = OI * 5f;
-            }
-            else {
-                int lightLevel = client.world.getBaseLightLevel(player.getBlockPos(), 0);
-
-                if(ClientStorage.pointLightDataLightRenderHandle != null && ClientStorage.pointLightDataLightRenderHandle.isValid()) {
-                    if(lightLevel <= 5) {
-                        ClientStorage.pointLightDataLightRenderHandle.getLightData().setBrightness(1);
-                    }
-                    else {
-                        ClientStorage.pointLightDataLightRenderHandle.getLightData().setBrightness(0);
-                    }
-                }
             }
         }
     }
@@ -383,6 +337,39 @@ public class AstroCraftClient implements ClientModInitializer {
 
                         planetFogShader.getUniformSafe("shadowViewMatrix").setMatrix(ShadowRenderer.shadowModelView(camera).peek().getPositionMatrix());
                         planetFogShader.getUniformSafe("shadowOrthographMatrix").setMatrix(ShadowRenderer.createProjMat());
+
+                        if(ClientStorage.shaderLightsDirty) {
+                            for(int i = 0; i < 32; i++) {
+                                planetFogShader.getUniformSafe("pointPositions[" + i + "]").setVector(new Vector3f(0));
+                                planetFogShader.getUniformSafe("pointBrightnesses[" + i + "]").setFloat(0);
+                                planetFogShader.getUniformSafe("pointRadii[" + i + "]").setFloat(0);
+                            }
+
+                            planetFogShader.getUniformSafe("pointLightCount").setInt(0);
+
+                            ClientStorage.shaderLightsDirty = true;
+                        }
+
+                        int i = 0;
+                        LightTypeRegistry.LightType<PointLightData> lightType = LightTypeRegistry.POINT.get();
+                        for(LightRenderHandle<PointLightData> handle : VeilRenderSystem.renderer().getLightRenderer().getLights(lightType)) {
+                            if(handle.isValid()) {
+                                if(i >= 32)
+                                    break;
+
+                                PointLightData lightData = handle.getLightData();
+
+                                Vector3f pos = new Vector3f((float) lightData.getPosition().x(), (float) lightData.getPosition().y(), (float) lightData.getPosition().z());
+
+                                planetFogShader.getUniformSafe("pointPositions[" + i + "]").setVector(pos);
+                                planetFogShader.getUniformSafe("pointBrightnesses[" + i + "]").setFloat(lightData.getBrightness());
+                                planetFogShader.getUniformSafe("pointRadii[" + i + "]").setFloat(lightData.getRadius());
+
+                                i++;
+                            }
+                        }
+
+                        planetFogShader.getUniformSafe("pointLightCount").setInt(i + 1);
                     }
                 }
 

@@ -3,6 +3,7 @@
   "package": "com.cubikore.astro.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "ClientWorldMixin",
     "ExampleMixin",
     "GameRendererMixin",
     "ImGuiRendererGL33Mixin",
@@ -19,6 +20,8 @@
     "requireAnnotations": true
   },
   "client": [
-    "CameraAccessor"
-	]
+    "CameraAccessor",
+    "PlayerEntityMixin",
+    "PlayerEntityRendererMixin"
+  ]
 }

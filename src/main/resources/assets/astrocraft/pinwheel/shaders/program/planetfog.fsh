@@ -123,6 +123,12 @@ float depthSampleToWorldDepth(float depthSample, vec2 texCoord) {
     return length(pos);
 }
 
+uniform vec3 pointPositions[32];
+uniform float pointBrightnesses[32];
+uniform float pointRadii[32];
+
+uniform int pointLightCount;
+
 uniform sampler2D DiffuseSampler;
 uniform sampler2D DepthSampler;
 uniform sampler2D ShadowDepthSampler;
@@ -206,14 +212,25 @@ float IGN(vec2 pixel) {
     return mod(52.9829189 * mod(0.06711056 * pixel.x + 0.00583715 * pixel.y, 1.0), 1.0);
 }
 
-vec3 shadow(vec3 inColor, vec3 viewPos, vec3 fogColor, float depth) {
+float attenuate_no_cusp(float dist, float radius) {
+    float s = dist / radius;
+
+    if (s >= 1.0) {
+        return 0.0;
+    }
+
+    float oneMinusS = 1.0 - s;
+    return oneMinusS * oneMinusS * oneMinusS;
+}
+
+vec3 shadow(vec3 inColor, vec3 viewPos, vec3 fogColor, float depth, float rawDepth) {
     vec3 color = inColor;
 
     vec3 ro = VeilCamera.CameraPosition + VeilCamera.CameraBobOffset;
     vec3 rd = viewDirFromUv(texCoord);
 
-    int numSteps = 500;
-    float maxDist = fogFactor;
+    int numSteps = 256;
+    float maxDist = depth >= fogFactor ? fogFactor : depth;
     float stepDistance = maxDist / numSteps;
 
     float dist = 0.0;
@@ -237,10 +254,24 @@ vec3 shadow(vec3 inColor, vec3 viewPos, vec3 fogColor, float depth) {
         float shadowDepth = shadowScreenSpace.z;
         float shadowSampler = texture(ShadowDepthSampler, shadowScreenSpace.xy).r;
 
-        float density = dist / maxDist;
+        float density = dist / fogFactor;
 
         float shadow = shadowDepth < shadowSampler ? 1.0 : 0.0;
-        float lightAmount = shadow;
+
+        float pointLightAmount = 0;
+
+        for(int i = 0; i < pointLightCount; i++) {
+            vec3 lightPos = pointPositions[i].xyz;
+            float lightBrightness = pointBrightnesses[i] * 2;
+            float lightRadius = pointRadii[i];
+
+            float dst = distance(lightPos, rp);
+            float oi = attenuate_no_cusp(dst, lightRadius);
+
+            pointLightAmount += oi * lightBrightness;
+        }
+
+        float lightAmount = shadow + pointLightAmount;
 
         vec3 inscatter = fogColor * lightAmount * density;
         scatteredLight += inscatter * transmittance * stepDistance;
@@ -251,43 +282,7 @@ vec3 shadow(vec3 inColor, vec3 viewPos, vec3 fogColor, float depth) {
     }
 
     color = color * transmittance + scatteredLight;
-
-
-
-    //color = vec3(dist);
-
-    //raymarch
-//    if(depth < 1.0){
-//        for (int i = 0; i <= 500; i++){
-//            vec3 rp = ro + rd * dist;
-//            dist += 0.03;
-//
-//            if (dist > worldDepth){
-//                color = vec3(depth);
-//                break;
-//            }
-//
-//            vec3 playerSpace = rp - ro;
-//            vec3 shadowScreenSpace = getShadowCoords(playerSpace, shadowViewMatrix, shadowOrthographMatrix);
-//            float shadowDepth = shadowScreenSpace.z;
-//            float shadowSampler = texture(ShadowDepthSampler, shadowScreenSpace.xy).r;
-//
-//
-//            if (shadowDepth < shadowSampler){
-//                brightness += 0.0001;
-//            }
-//
-//            if (brightness >= 1.5){
-//                brightness = 1.5;
-//                break;
-//            }
-//
-//        }
-//    }else{
-//        brightness = 1.5;
-//    }
-
-    //color.rgb += (brightness * vec3(1));
+    color += (1.0 / 255.0) * noise;
 
     return color;
 }
@@ -307,7 +302,7 @@ void main() {
 //        float t = exp(-depth / fogFactor);
 //        color = mix(fogColor, color, t);
 
-        color = shadow(color, viewPos, fogColor, depth);
+        color = shadow(color, viewPos, fogColor, depth, rawDepth);
     }
 
     fragColor = vec4(color, 1.0);

@@ -2,9 +2,13 @@ package com.cubikore.astro.mixin;
 
 import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
+import com.cubikore.astro.client.renderer.ShadowRenderer;
 import com.cubikore.astro.dimension.DimensionKeys;
+import com.cubikore.astro.util.PlayerLightAccess;
 import com.cubikore.astro.weather.planet.ClientWeather;
 import com.mojang.blaze3d.systems.RenderSystem;
+import foundry.veil.api.client.render.light.data.PointLightData;
+import foundry.veil.api.client.render.light.renderer.LightRenderHandle;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectListIterator;
 import net.minecraft.client.MinecraftClient;
@@ -16,6 +20,7 @@ import net.minecraft.client.render.chunk.ChunkBuilder;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.MathHelper;
@@ -78,6 +83,14 @@ public class WorldRendererMixin {
         x -= ClientStorage.terrainOffset[0];
         y -= ClientStorage.terrainOffset[1];
         z -= ClientStorage.terrainOffset[2];
+
+        if(client.player != null) {
+            PlayerLightAccess access = (PlayerLightAccess) client.player;
+            LightRenderHandle<PointLightData> handle = access.getLightHandle();
+            if(handle != null && handle.isValid()) {
+                access.getLightHandle().getLightData().setPosition(x, y, z);
+            }
+        }
 
         RenderSystem.assertOnRenderThread();
         renderLayer.startDrawing();

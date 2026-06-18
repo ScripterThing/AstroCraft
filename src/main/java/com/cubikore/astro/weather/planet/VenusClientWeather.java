@@ -12,11 +12,11 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector2f;
 
-public class VenusWeather extends ClientWeather {
-    public VenusWeather() {
+public class VenusClientWeather extends ClientWeather {
+    public VenusClientWeather() {
         super("venus");
         this.renderClouds = false;
-        this.clearAtmosphereConditions.fogDistance = 500f;
+        this.clearAtmosphereConditions.fogDistance = 150f;
         this.clearAtmosphereConditions.lightDarkFactor = 1f;
         this.clearAtmosphereConditions.hasFog = true;
         this.clearAtmosphereConditions.updateSunEachFrame = true;
@@ -44,7 +44,7 @@ public class VenusWeather extends ClientWeather {
         MinecraftClient client = MinecraftClient.getInstance();
 
         if (type.equals("acid_rain")) {
-            this.targetAtmosphereConditions.fogDistance = 10f;
+            this.targetAtmosphereConditions.fogDistance = 20f;
             this.targetAtmosphereConditions.lightDarkFactor = 0f;
 
             this.targetAtmosphereConditions.sunBrightness = 0.3f;
