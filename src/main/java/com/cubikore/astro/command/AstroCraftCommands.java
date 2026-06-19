@@ -27,14 +27,14 @@ public class AstroCraftCommands {
                             CommandManager.literal("setplanetweather")
                                     .then(CommandManager.argument("planet", StringArgumentType.word())
                                             .suggests((context, builder) -> {
-                                                for (String planet : AstroCraftClient.weatherManager.supportedPlanets) {
+                                                for (String planet : AstroCraftClient.clientGameManager.weatherManager.supportedPlanets) {
                                                     builder.suggest(planet);
                                                 }
                                                 return builder.buildFuture();
                                             })
                                             .then(CommandManager.argument("weather_type", StringArgumentType.word())
                                                     .suggests((context, builder) -> {
-                                                        for (String type : AstroCraftClient.weatherManager.clientWeatherTypes) {
+                                                        for (String type : AstroCraftClient.clientGameManager.weatherManager.clientWeatherTypes) {
                                                             builder.suggest(type);
                                                         }
                                                         return builder.buildFuture();
@@ -49,7 +49,7 @@ public class AstroCraftCommands {
 
                                                                         Identifier planetId = Identifier.tryParse(planet);
 
-                                                                        AstroCraft.weatherManager.setWeather(planetId, new PlanetWeather(type, duration, intensity));
+                                                                        AstroCraft.serverGameManager.weatherManager.setWeather(planetId, new PlanetWeather(type, duration, intensity));
 
                                                                         String feedbackString = "Set weather of " + planet + " to " + type + " for " + duration + " ticks with intensity of " + intensity;
 

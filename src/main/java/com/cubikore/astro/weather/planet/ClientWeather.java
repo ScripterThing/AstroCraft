@@ -1,5 +1,6 @@
 package com.cubikore.astro.weather.planet;
 
+import com.cubikore.astro.AstroCraft;
 import com.cubikore.astro.client.ClientStorage;
 import com.cubikore.astro.weather.AtmosphereConditions;
 
@@ -25,7 +26,6 @@ public class ClientWeather {
     public final String weatherName;
 
     public ClientWeather(String weatherName) {
-        System.out.println(weatherName);
         this.weatherName = weatherName;
         supportedTypes.add("clear");
     }

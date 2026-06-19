@@ -5,7 +5,6 @@ import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
 import com.cubikore.astro.ship.AstroCraftShip;
 import com.cubikore.astro.util.CommonStorage;
-import com.cubikore.astro.server.ServerStorage;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.RegistryByteBuf;
@@ -46,8 +45,7 @@ public record ShipMovingPayload(float x, float y, float z, float yaw, boolean sh
         if(!ClientStorage.doingFTLJump) {
             float yaw = payload.yaw;
             Vector4f target = new Vector4f(payload.x(), payload.y(), payload.z(), yaw);
-            AstroCraftClient.targetOffsetPos.set(target);
-            AstroCraftClient.interpTime = 0f;
+            AstroCraftClient.clientGameManager.targetOffsetPos.set(target);
         }
     }
 }

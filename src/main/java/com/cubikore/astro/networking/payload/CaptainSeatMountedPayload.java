@@ -36,8 +36,6 @@ public record CaptainSeatMountedPayload(BlockPos blockPos, int entityId) impleme
         BlockPos pos = payload.blockPos();
         int seatId = payload.entityId();
 
-        System.out.println("Packet Received");
-
         Entity e = context.client().world.getEntityById(seatId);
 
         if(e instanceof DisplayEntity.TextDisplayEntity entity) {

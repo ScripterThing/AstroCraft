@@ -2,6 +2,7 @@ package com.cubikore.astro.particle.emitters;
 
 import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
+import com.cubikore.astro.game.client.AstroCraftClientGameManager;
 import com.cubikore.astro.util.VectorMath;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
@@ -97,6 +98,8 @@ public class VenusAtmosphereParticleEmitter extends AstParticleEmitter {
 
         Vec3d vel = player.getVelocity();
 
+        AstroCraftClientGameManager gameManager = AstroCraftClient.clientGameManager;
+
         for(int i = 0; i < count; i++) {
             if(despawned[i]) {
                 continue;
@@ -142,8 +145,8 @@ public class VenusAtmosphereParticleEmitter extends AstParticleEmitter {
             if (playerPos.y > 64) {
                 double frequency = 0.03;
 
-                float windX = (float) windNoise.sample((AstroCraftClient.getGameTime() * frequency) , (AstroCraftClient.getGameTime() * frequency), (AstroCraftClient.getGameTime() * frequency));
-                float windZ = (float) windNoise.sample((AstroCraftClient.getGameTime() + 856 * frequency), (AstroCraftClient.getGameTime() + 893 * frequency), (AstroCraftClient.getGameTime() - 254 * frequency));
+                float windX = (float) windNoise.sample((gameManager.getGameTime() * frequency) , (gameManager.getGameTime() * frequency), (gameManager.getGameTime() * frequency));
+                float windZ = (float) windNoise.sample((gameManager.getGameTime() + 856 * frequency), (gameManager.getGameTime() + 893 * frequency), (gameManager.getGameTime() - 254 * frequency));
 
                 float windStrength = (0.1f * speed) * ClientStorage.windStrength;
 

@@ -84,7 +84,7 @@ public class VenusAcidRainParticleEmitter extends  AstParticleEmitter{
     protected void despawn(int i) {
         if(!emittingStopped) {
             if (random.nextFloat() <= 0.2f)
-                AstroCraftClient.particleManager.addEmitter(new VenusAcidRainSplashParticleEmitter(new Vector3f(x[i], y[i] + 0.5f, z[i]), 1, random));
+                AstroCraftClient.clientGameManager.particleManager.addEmitter(new VenusAcidRainSplashParticleEmitter(new Vector3f(x[i], y[i] + 0.5f, z[i]), 1, random));
 
             float[] nPos = calculateSpawnPos();
 

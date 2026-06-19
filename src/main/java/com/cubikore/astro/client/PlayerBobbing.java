@@ -1,12 +1,12 @@
 package com.cubikore.astro.client;
 
+import com.cubikore.astro.AstroCraftClient;
+import com.cubikore.astro.game.client.AstroCraftClientGameManager;
 import com.cubikore.astro.math.AstMath;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.RotationAxis;
-
-import static com.cubikore.astro.AstroCraftClient.getGameTime;
 
 public class PlayerBobbing {
     private static long startAnimTime = System.currentTimeMillis();
@@ -29,6 +29,8 @@ public class PlayerBobbing {
 
         float psm = getDeltaTime();
 
+        AstroCraftClientGameManager gameManager = AstroCraftClient.clientGameManager;
+
         if(playerEntity.strideDistance > 0.01f) {
             stoppedMoving = false;
 
@@ -37,8 +39,8 @@ public class PlayerBobbing {
                 captureAnimTime();
             }
 
-            float sine = (float) Math.sin(getGameTime() * (playerEntity.isSprinting() ? 10f : 6f));
-            float sine2 = (float) Math.sin(getGameTime() * (playerEntity.isSprinting() ? 15f : 6f));
+            float sine = (float) Math.sin(gameManager.getGameTime() * (playerEntity.isSprinting() ? 10f : 6f));
+            float sine2 = (float) Math.sin(gameManager.getGameTime() * (playerEntity.isSprinting() ? 15f : 6f));
 
             targetPitch = sine * 0.5f;
             targetRoll = sine2;

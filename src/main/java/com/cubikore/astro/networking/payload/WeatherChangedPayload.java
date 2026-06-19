@@ -37,6 +37,6 @@ public record WeatherChangedPayload(String weatherJson, boolean planetChanged, I
 
         ClientStorage.currentWeather = AstroCraft.gson.fromJson(weatherJson, PlanetWeather.class);
 
-        AstroCraftClient.weatherChanged(context.client(), context.player(), payload.planetChanged, payload.fromPlanetName());
+        AstroCraftClient.clientGameManager.weatherChanged(context.client(), context.player(), payload.planetChanged, payload.fromPlanetName());
     }
 }

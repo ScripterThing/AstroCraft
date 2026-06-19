@@ -79,8 +79,8 @@ public class FTLJumpCutscene extends AstCutscene{
                     cameraEntity.refreshPositionAndAngles(134, 16, 80, 142.2f, 15f);
 
                     ClientStorage.renderedWorldOffset.set(ClientStorage.FTLJumpDestination);
-                    AstroCraftClient.prevWorldOffset.set(ClientStorage.renderedWorldOffset);
-                    AstroCraftClient.targetOffsetPos.set(ClientStorage.FTLJumpDestination);
+                    AstroCraftClient.clientGameManager.prevWorldOffset.set(ClientStorage.renderedWorldOffset);
+                    AstroCraftClient.clientGameManager.targetOffsetPos.set(ClientStorage.FTLJumpDestination);
 
                     sendDonePacket();
                 }
@@ -116,8 +116,8 @@ public class FTLJumpCutscene extends AstCutscene{
         ClientStorage.terrainOffset[2] = 0;
 
         ClientStorage.renderedWorldOffset.set(ClientStorage.FTLJumpDestination);
-        AstroCraftClient.prevWorldOffset.set(ClientStorage.renderedWorldOffset);
-        AstroCraftClient.targetOffsetPos.set(ClientStorage.FTLJumpDestination);
+        AstroCraftClient.clientGameManager.prevWorldOffset.set(ClientStorage.renderedWorldOffset);
+        AstroCraftClient.clientGameManager.targetOffsetPos.set(ClientStorage.FTLJumpDestination);
 
         sendDonePacket();
 

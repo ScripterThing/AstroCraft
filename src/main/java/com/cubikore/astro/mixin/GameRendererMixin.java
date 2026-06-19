@@ -26,8 +26,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.IOException;
 
-import static com.cubikore.astro.AstroCraftClient.getGameTime;
-
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
     @Unique private static final Identifier shadowSolid = Identifier.of(AstroCraft.MOD_ID, "shadowmap/rendertype_solid");
@@ -48,14 +46,6 @@ public class GameRendererMixin {
 
     @Inject(method = "render", at = @At("HEAD"))
     private void doInterpolation(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
-        float deltaTime = tickCounter.getLastFrameDuration() / 20.0f;
-        AstroCraftClient.interpolateShip();
-
-        float gameTime = getGameTime();
-
-        double strength = ClientStorage.windNoiseSampler.sample((gameTime + 32) * 0.03f, (gameTime - 67) * 0.03f) * 0.5 + 0.5;
-
-        ClientStorage.windStrength = (float) strength;
     }
 
     @Inject(method = {

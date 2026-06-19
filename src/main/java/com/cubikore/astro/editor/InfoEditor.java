@@ -22,7 +22,7 @@ public class InfoEditor extends SingleWindowInspector {
             ImGui.text("yaw: " + ClientStorage.renderedWorldOffset.w);
             ImGui.unindent();
 
-            ClientWeather weather = AstroCraftClient.weatherManager.get(MinecraftClient.getInstance().world.getRegistryKey());
+            ClientWeather weather = AstroCraftClient.clientGameManager.weatherManager.get(MinecraftClient.getInstance().world.getRegistryKey());
 
             if(weather != null) {
                 ImGui.text("Atmosphere Conditions");

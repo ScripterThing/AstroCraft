@@ -4,7 +4,6 @@ import com.cubikore.astro.AstroCraft;
 import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
 import com.cubikore.astro.ship.AstroCraftShip;
-import com.cubikore.astro.weather.PlanetWeather;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.RegistryByteBuf;
@@ -39,6 +38,6 @@ public record FTLJumpPayload(Vector3f destination, float destinationYaw) impleme
         float destYaw = payload.destinationYaw();
 
         ClientStorage.FTLJumpDestination = new Vector4f(destPos.x, destPos.y, destPos.z, destYaw);
-        AstroCraftClient.cutsceneManager.playScene(context.client(), "FTLJump");
+        AstroCraftClient.clientGameManager.cutsceneManager.playScene(context.client(), "FTLJump");
     }
 }

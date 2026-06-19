@@ -2,7 +2,6 @@ package com.cubikore.astro.mixin;
 
 import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
-import com.cubikore.astro.client.renderer.ShadowRenderer;
 import com.cubikore.astro.dimension.DimensionKeys;
 import com.cubikore.astro.util.PlayerLightAccess;
 import com.cubikore.astro.weather.planet.ClientWeather;
@@ -20,7 +19,6 @@ import net.minecraft.client.render.chunk.ChunkBuilder;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.MathHelper;
@@ -56,7 +54,7 @@ public class WorldRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "renderClouds", cancellable = true)
     private void skipCloudRendering(MatrixStack matrices, Matrix4f matrix4f, Matrix4f matrix4f2, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci) {
-        ClientWeather weather = AstroCraftClient.weatherManager.get(client.world.getRegistryKey());
+        ClientWeather weather = AstroCraftClient.clientGameManager.weatherManager.get(client.world.getRegistryKey());
 
         if(DimensionKeys.isSpace(client.world) || !weather.canRenderClouds())
             ci.cancel();

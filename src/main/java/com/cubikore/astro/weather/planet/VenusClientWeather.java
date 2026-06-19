@@ -1,6 +1,7 @@
 package com.cubikore.astro.weather.planet;
 
 import com.cubikore.astro.AstroCraftClient;
+import com.cubikore.astro.game.client.AstroCraftClientGameManager;
 import com.cubikore.astro.particle.emitters.VenusAcidRainParticleEmitter;
 import com.cubikore.astro.particle.emitters.VenusAcidRainSplashParticleEmitter;
 import com.cubikore.astro.particle.emitters.VenusAtmosphereParticleEmitter;
@@ -43,6 +44,8 @@ public class VenusClientWeather extends ClientWeather {
 
         MinecraftClient client = MinecraftClient.getInstance();
 
+        AstroCraftClientGameManager gameManager = AstroCraftClient.clientGameManager;
+
         if (type.equals("acid_rain")) {
             this.targetAtmosphereConditions.fogDistance = 20f;
             this.targetAtmosphereConditions.lightDarkFactor = 0f;
@@ -52,23 +55,23 @@ public class VenusClientWeather extends ClientWeather {
             this.targetAtmosphereConditions.sunSize = 900f;
             this.targetAtmosphereConditions.sunWhiteSize = 1000f;
 
-            AstroCraftClient.particleManager.stopEmitterType(VenusAtmosphereParticleEmitter.class);
-            AstroCraftClient.particleManager.addEmitter(new VenusAcidRainParticleEmitter(new Vector2f(0.025f), 500));
+            AstroCraftClient.clientGameManager.particleManager.stopEmitterType(VenusAtmosphereParticleEmitter.class);
+            AstroCraftClient.clientGameManager.particleManager.addEmitter(new VenusAcidRainParticleEmitter(new Vector2f(0.025f), 500));
         }
         else if (type.equals("clear")) {
             this.targetAtmosphereConditions.sunBrightness = 2f;
-            AstroCraftClient.particleManager.stopEmitterType(VenusAcidRainParticleEmitter.class);
+            gameManager.particleManager.stopEmitterType(VenusAcidRainParticleEmitter.class);
 
-            AstroCraftClient.particleManager.addEmitter(new VenusAtmosphereParticleEmitter(new Vector2f(0.0625f, 0.025f),0.04f, 255, 203, 33, 150));
-            AstroCraftClient.particleManager.addEmitter(new VenusAtmosphereParticleEmitter(new Vector2f(0.04375f, 0.0175F),  0.08f, 46, 46, 46, 225));
+            gameManager.particleManager.addEmitter(new VenusAtmosphereParticleEmitter(new Vector2f(0.0625f, 0.025f),0.04f, 255, 203, 33, 150));
+            gameManager.particleManager.addEmitter(new VenusAtmosphereParticleEmitter(new Vector2f(0.04375f, 0.0175F),  0.08f, 46, 46, 46, 225));
 
-            if(AstroCraftClient.venusLowWindSoundInstance == null || AstroCraftClient.venusHighWindSoundInstance == null) {
-                AstroCraftClient.venusLowWindSoundInstance = new VenusLowWindSoundInstance(AstroCraftSounds.WIND_LOW, SoundCategory.AMBIENT, 1, 1, client.player, 1);
-                AstroCraftClient.venusHighWindSoundInstance = new VenusHighWindSoundInstance(AstroCraftSounds.WIND_HIGH, SoundCategory.AMBIENT, 1, 1, client.player, 1);
+            if(gameManager.venusLowWindSoundInstance == null || gameManager.venusHighWindSoundInstance == null) {
+                gameManager.venusLowWindSoundInstance = new VenusLowWindSoundInstance(AstroCraftSounds.WIND_LOW, SoundCategory.AMBIENT, 1, 1, client.player, 1);
+                gameManager.venusHighWindSoundInstance = new VenusHighWindSoundInstance(AstroCraftSounds.WIND_HIGH, SoundCategory.AMBIENT, 1, 1, client.player, 1);
             }
 
-            client.getSoundManager().play(AstroCraftClient.venusLowWindSoundInstance);
-            client.getSoundManager().play(AstroCraftClient.venusHighWindSoundInstance);
+            client.getSoundManager().play(gameManager.venusLowWindSoundInstance);
+            client.getSoundManager().play(gameManager.venusHighWindSoundInstance);
         }
     }
 
@@ -76,8 +79,10 @@ public class VenusClientWeather extends ClientWeather {
     public void cleanUp() {
         super.cleanUp();
 
-        AstroCraftClient.particleManager.removeEmitterType(VenusAtmosphereParticleEmitter.class);
-        AstroCraftClient.particleManager.removeEmitterType(VenusAcidRainSplashParticleEmitter.class);
+        AstroCraftClientGameManager gameManager = AstroCraftClient.clientGameManager;
+
+        gameManager.particleManager.removeEmitterType(VenusAtmosphereParticleEmitter.class);
+        gameManager.particleManager.removeEmitterType(VenusAcidRainSplashParticleEmitter.class);
     }
 
     @Override

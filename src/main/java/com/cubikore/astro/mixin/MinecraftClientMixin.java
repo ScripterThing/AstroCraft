@@ -1,11 +1,9 @@
 package com.cubikore.astro.mixin;
 
-import com.cubikore.astro.AstroCraft;
 import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.particle.AstParticleManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
-import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.resource.ReloadableResourceManagerImpl;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,6 +19,6 @@ public class MinecraftClientMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void doInterpolation(RunArgs runArgs, CallbackInfo ci) {
         MinecraftClient client = (MinecraftClient) (Object) this;
-        AstroCraftClient.particleManager = new AstParticleManager(client.getTextureManager());
+        AstroCraftClient.clientGameManager.particleManager = new AstParticleManager(client.getTextureManager());
     }
 }

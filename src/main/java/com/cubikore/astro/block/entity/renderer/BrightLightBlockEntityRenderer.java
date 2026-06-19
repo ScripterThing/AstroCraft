@@ -1,7 +1,7 @@
 package com.cubikore.astro.block.entity.renderer;
 
-import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.block.entity.BrightLightBlockEntity;
+import com.cubikore.astro.client.renderer.AstroCraftRenderer;
 import foundry.veil.api.client.render.rendertype.VeilRenderType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
@@ -21,7 +21,7 @@ public class BrightLightBlockEntityRenderer implements BlockEntityRenderer<Brigh
 
     @Override
     public void render(BrightLightBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        RenderLayer layer = VeilRenderType.get(AstroCraftClient.UNLIT_LAYER);
+        RenderLayer layer = VeilRenderType.get(AstroCraftRenderer.UNLIT_LAYER);
 
         matrices.push();
 

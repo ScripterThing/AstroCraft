@@ -18,6 +18,8 @@ public class ClientWeatherManager {
     public List<String> supportedPlanets = new ArrayList<>();
     public List<String> clientWeatherTypes = new ArrayList<>();
 
+    private static final ClientWeather NULL = new ClientWeather("null");
+
     public void add(Identifier planetId, ClientWeather weather) {
         for(String type : weather.supportedTypes) {
             if(!clientWeatherTypes.contains(type))
@@ -55,6 +57,6 @@ public class ClientWeatherManager {
         if(result != null)
             return result;
 
-        return new ClientWeather("null");
+        return NULL;
     }
 }

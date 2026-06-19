@@ -43,7 +43,7 @@ public class WeatherManager {
 
     public void sendWeatherState(ServerPlayerEntity player, boolean planetChanged, Identifier fromPlanetName) {
         Identifier planetId = Universe.getPlanetIdFromWorld(player.getWorld().getRegistryKey());
-        PlanetWeather weather = AstroCraft.weatherManager.getWeather(planetId);
+        PlanetWeather weather = AstroCraft.serverGameManager.weatherManager.getWeather(planetId);
 
         String json = AstroCraft.gson.toJson(weather);
         ServerPlayNetworking.send(player, new WeatherChangedPayload(json, planetChanged, fromPlanetName));
