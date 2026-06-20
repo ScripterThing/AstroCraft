@@ -9,6 +9,11 @@
     "ShadowDepthSampler": {
       "type": "framebuffer",
       "name": "astrocraft:shadowmap:depth"
+    },
+    "NormalSampler": {
+      "type": "framebuffer",
+      "name": "veil:dynamic_main",
+      "sampler": 2
     }
   }
 }

@@ -1,8 +1,6 @@
 package com.cubikore.astro.mixin;
 
-import com.cubikore.astro.util.PlayerLightAccess;
-import foundry.veil.api.client.render.light.data.PointLightData;
-import foundry.veil.api.client.render.light.renderer.LightRenderHandle;
+import com.cubikore.astro.util.PlayerComponentAccess;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,8 +18,8 @@ public class ClientWorldMixin {
         Entity entity = world.getEntityById(entityId);
 
         if(entity instanceof PlayerEntity player) {
-            PlayerLightAccess access = (PlayerLightAccess) player;
-            access.removeLight();
+            PlayerComponentAccess access = (PlayerComponentAccess) player;
+            access.removeLights();
         }
     }
 }

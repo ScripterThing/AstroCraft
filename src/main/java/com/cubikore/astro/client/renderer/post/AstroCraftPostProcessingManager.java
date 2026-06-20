@@ -3,6 +3,7 @@ package com.cubikore.astro.client.renderer.post;
 import com.cubikore.astro.AstroCraft;
 import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
+import com.cubikore.astro.client.light.SpotLight;
 import com.cubikore.astro.client.renderer.AstroCraftRenderer;
 import com.cubikore.astro.client.renderer.ShadowRenderer;
 import com.cubikore.astro.dimension.DimensionKeys;
@@ -15,6 +16,7 @@ import com.cubikore.astro.weather.planet.ClientWeather;
 import foundry.veil.api.client.editor.EditorManager;
 import foundry.veil.api.client.registry.LightTypeRegistry;
 import foundry.veil.api.client.render.VeilRenderSystem;
+import foundry.veil.api.client.render.light.data.AreaLightData;
 import foundry.veil.api.client.render.light.data.PointLightData;
 import foundry.veil.api.client.render.light.renderer.LightRenderHandle;
 import foundry.veil.api.client.render.post.PostProcessingManager;
@@ -23,6 +25,7 @@ import foundry.veil.platform.VeilEventPlatform;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.util.Identifier;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 public class AstroCraftPostProcessingManager {
@@ -34,7 +37,7 @@ public class AstroCraftPostProcessingManager {
     public static Identifier BLOOM_ID = Identifier.of(AstroCraft.MOD_ID, "bloom");
     public static Identifier SHADOWS_ID = Identifier.of(AstroCraft.MOD_ID, "shadows");
 
-    private AstroCraftRenderer renderer;
+    private final AstroCraftRenderer renderer;
 
     public AstroCraftPostProcessingManager(AstroCraftRenderer renderer) {
         this.renderer = renderer;
@@ -105,38 +108,64 @@ public class AstroCraftPostProcessingManager {
                         planetFogShader.getUniformSafe("shadowViewMatrix").setMatrix(ShadowRenderer.shadowModelView(camera).peek().getPositionMatrix());
                         planetFogShader.getUniformSafe("shadowOrthographMatrix").setMatrix(ShadowRenderer.createProjMat());
 
-                        if(ClientStorage.shaderLightsDirty) {
-                            for(int i = 0; i < 32; i++) {
-                                planetFogShader.getUniformSafe("pointPositions[" + i + "]").setVector(new Vector3f(0));
+                        if(renderer.lightsDirty()) {
+                            for(int i = 0; i < 10; i++) {
+                                Vector3f zero = new Vector3f(0);
+                                planetFogShader.getUniformSafe("pointPositions[" + i + "]").setVector(zero);
                                 planetFogShader.getUniformSafe("pointBrightnesses[" + i + "]").setFloat(0);
                                 planetFogShader.getUniformSafe("pointRadii[" + i + "]").setFloat(0);
+
+                                planetFogShader.getUniformSafe("spotLightPositions[" + i + "]").setVector(zero);
+                                planetFogShader.getUniformSafe("spotLightRotations[" + i + "]").setVector(new Vector2f(0));
+                                planetFogShader.getUniformSafe("spotLightRadii[" + i + "]").setFloat(0);
+                                planetFogShader.getUniformSafe("spotLightDistances[" + i + "]").setFloat(0);
+                                planetFogShader.getUniformSafe("spotLightBrightnesses[" + i + "]").setFloat(0);
                             }
 
                             planetFogShader.getUniformSafe("pointLightCount").setInt(0);
+                            planetFogShader.getUniformSafe("spotLightCount").setInt(0);
 
-                            ClientStorage.shaderLightsDirty = false;
+                            renderer.clearRemovedLights();
+                            renderer.markLightsClean();
                         }
 
-                        int i = 0;
-                        LightTypeRegistry.LightType<PointLightData> lightType = LightTypeRegistry.POINT.get();
-                        for(LightRenderHandle<PointLightData> handle : VeilRenderSystem.renderer().getLightRenderer().getLights(lightType)) {
+                        int pointLightId = 0;
+                        int sptoLightId = 0;
+
+                        LightTypeRegistry.LightType<PointLightData> pointLightType = LightTypeRegistry.POINT.get();
+
+                        for(LightRenderHandle<PointLightData> handle : VeilRenderSystem.renderer().getLightRenderer().getLights(pointLightType)) {
                             if(handle.isValid()) {
-                                if(i >= 32)
+                                if(pointLightId >= 10)
                                     break;
 
                                 PointLightData lightData = handle.getLightData();
 
                                 Vector3f pos = new Vector3f((float) lightData.getPosition().x(), (float) lightData.getPosition().y(), (float) lightData.getPosition().z());
 
-                                planetFogShader.getUniformSafe("pointPositions[" + i + "]").setVector(pos);
-                                planetFogShader.getUniformSafe("pointBrightnesses[" + i + "]").setFloat(lightData.getBrightness());
-                                planetFogShader.getUniformSafe("pointRadii[" + i + "]").setFloat(lightData.getRadius());
+                                planetFogShader.getUniformSafe("pointPositions[" + pointLightId + "]").setVector(pos);
+                                planetFogShader.getUniformSafe("pointBrightnesses[" + pointLightId + "]").setFloat(lightData.getBrightness());
+                                planetFogShader.getUniformSafe("pointRadii[" + pointLightId + "]").setFloat(lightData.getRadius());
 
-                                i++;
+                                pointLightId++;
                             }
                         }
 
-                        planetFogShader.getUniformSafe("pointLightCount").setInt(i + 1);
+                        for(SpotLight light : AstroCraftClient.renderer.spotLights) {
+                            if(sptoLightId >= 10)
+                                break;
+
+                            planetFogShader.getUniformSafe("spotLightPositions[" + sptoLightId + "]").setVector(light.getPosition());
+                            planetFogShader.getUniformSafe("spotLightRotations[" + sptoLightId + "]").setVector(light.getRotation());
+                            planetFogShader.getUniformSafe("spotLightRadii[" + sptoLightId + "]").setFloat(light.getRadius());
+                            planetFogShader.getUniformSafe("spotLightDistances[" + sptoLightId + "]").setFloat(light.getDistance());
+                            planetFogShader.getUniformSafe("spotLightBrightnesses[" + sptoLightId + "]").setFloat(light.getBrightness());
+
+                            sptoLightId++;
+                        }
+
+                        planetFogShader.getUniformSafe("pointLightCount").setInt(pointLightId);
+                        planetFogShader.getUniformSafe("spotLightCount").setInt(sptoLightId);
                     }
                 }
 

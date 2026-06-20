@@ -2,8 +2,9 @@ package com.cubikore.astro.mixin;
 
 import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
+import com.cubikore.astro.client.light.SpotLight;
 import com.cubikore.astro.dimension.DimensionKeys;
-import com.cubikore.astro.util.PlayerLightAccess;
+import com.cubikore.astro.util.PlayerComponentAccess;
 import com.cubikore.astro.weather.planet.ClientWeather;
 import com.mojang.blaze3d.systems.RenderSystem;
 import foundry.veil.api.client.render.light.data.PointLightData;
@@ -23,10 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Matrix4f;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -51,6 +49,9 @@ public class WorldRendererMixin {
     @Final
     @Shadow
     private MinecraftClient client;
+
+    @Unique
+    private Camera dummyCam;
 
     @Inject(at = @At("HEAD"), method = "renderClouds", cancellable = true)
     private void skipCloudRendering(MatrixStack matrices, Matrix4f matrix4f, Matrix4f matrix4f2, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci) {
@@ -83,10 +84,15 @@ public class WorldRendererMixin {
         z -= ClientStorage.terrainOffset[2];
 
         if(client.player != null) {
-            PlayerLightAccess access = (PlayerLightAccess) client.player;
-            LightRenderHandle<PointLightData> handle = access.getLightHandle();
-            if(handle != null && handle.isValid()) {
-                access.getLightHandle().getLightData().setPosition(x, y, z);
+            PlayerComponentAccess access = (PlayerComponentAccess) client.player;
+            LightRenderHandle<PointLightData> handle = access.getPointLightHandle();
+            SpotLight spotLight = access.getPlayerSpotLight();
+            if(handle != null && handle.isValid() && spotLight != null) {
+                if(dummyCam == null)
+                    dummyCam = new Camera();
+
+                handle.getLightData().setPosition(x, y, z);
+                spotLight.matchToView(client.gameRenderer.getCamera());
             }
         }
 

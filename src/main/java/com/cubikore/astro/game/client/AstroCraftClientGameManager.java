@@ -1,5 +1,6 @@
 package com.cubikore.astro.game.client;
 
+import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
 import com.cubikore.astro.client.cutscene.CutsceneManager;
 import com.cubikore.astro.client.cutscene.FTLJumpCutscene;
@@ -7,14 +8,17 @@ import com.cubikore.astro.client.light.PositionPointLightData;
 import com.cubikore.astro.dimension.DimensionKeys;
 import com.cubikore.astro.events.client.AstroCraftClientWeatherEvents;
 import com.cubikore.astro.math.AstMath;
+import com.cubikore.astro.networking.payload.FTLJumpPayload;
+import com.cubikore.astro.networking.payload.PlayerFlashlightPayload;
 import com.cubikore.astro.networking.payload.ShipMovingPayload;
 import com.cubikore.astro.particle.AstParticleManager;
 import com.cubikore.astro.sound.VenusHighWindSoundInstance;
 import com.cubikore.astro.sound.VenusLowWindSoundInstance;
 import com.cubikore.astro.universe.Planet;
 import com.cubikore.astro.universe.Universe;
+import com.cubikore.astro.util.AstroCraftUtil;
 import com.cubikore.astro.util.CommonStorage;
-import com.cubikore.astro.util.PlayerLightAccess;
+import com.cubikore.astro.util.PlayerComponentAccess;
 import com.cubikore.astro.weather.ClientWeatherManager;
 import com.cubikore.astro.weather.PlanetWeather;
 import com.cubikore.astro.weather.planet.ClientWeather;
@@ -22,6 +26,7 @@ import com.cubikore.astro.weather.planet.VenusClientWeather;
 import foundry.veil.api.client.render.light.renderer.LightRenderHandle;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
@@ -52,6 +57,8 @@ public class AstroCraftClientGameManager {
     public AstParticleManager particleManager;
     public VenusLowWindSoundInstance venusLowWindSoundInstance;
     public VenusHighWindSoundInstance venusHighWindSoundInstance;
+
+    private long lastPressed = System.currentTimeMillis();
 
     public void init() {
         weatherManager.add(Universe.SPACE_ID, new ClientWeather("space"));
@@ -85,6 +92,10 @@ public class AstroCraftClientGameManager {
             }
         });
 
+        ClientPlayConnectionEvents.DISCONNECT.register(((handler, client) -> {
+            AstroCraftClient.renderer.removeLights();
+        }));
+
         ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register(((client, world) -> {
             boolean inSpace = DimensionKeys.isSpace(world);
 
@@ -93,8 +104,8 @@ public class AstroCraftClientGameManager {
             }
 
             if(client.player != null) {
-                PlayerLightAccess access = (PlayerLightAccess) client.player;
-                access.removeLight();
+                PlayerComponentAccess access = (PlayerComponentAccess) client.player;
+                access.removeLights();
             }
         }));
 
@@ -103,6 +114,8 @@ public class AstroCraftClientGameManager {
             if(player != null) {
                 if(player.hasVehicle() && player.getVehicle() instanceof DisplayEntity.TextDisplayEntity entity && CommonStorage.captainSeatEntities.containsKey(player.getVehicle().getBlockPos()))
                     handleShipMovements();
+
+                handleFlashlight(player);
 
                 cutsceneManager.tick(client);
             }
@@ -115,6 +128,19 @@ public class AstroCraftClientGameManager {
         double strength = ClientStorage.windNoiseSampler.sample((gameTime + 32) * 0.03f, (gameTime - 67) * 0.03f) * 0.5 + 0.5;
 
         ClientStorage.windStrength = (float) strength;
+    }
+
+    private void handleFlashlight(PlayerEntity player) {
+        if(AstroCraftUtil.timePassed(lastPressed) > 0.5f) {
+            if(isKeyPressed(GLFW.GLFW_KEY_F)) {
+                capturePressed();
+                ClientPlayNetworking.send(new PlayerFlashlightPayload(player.getUuid(), true));
+            }
+        }
+    }
+
+    private void capturePressed() {
+        lastPressed = System.currentTimeMillis();
     }
 
     private void handleShipMovements() {

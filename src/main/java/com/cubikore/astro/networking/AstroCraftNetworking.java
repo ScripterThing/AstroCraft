@@ -11,6 +11,7 @@ public class AstroCraftNetworking {
         ServerPlayNetworking.registerGlobalReceiver(CaptainSeatMountedPayload.ID, CaptainSeatMountedPayload::C2S);
         ServerPlayNetworking.registerGlobalReceiver(ShipCommandPayload.ID, ShipCommandPayload::C2S);
         ServerPlayNetworking.registerGlobalReceiver(FTLJumpPayload.ID, FTLJumpPayload::C2S);
+        ServerPlayNetworking.registerGlobalReceiver(PlayerFlashlightPayload.ID, PlayerFlashlightPayload::C2S);
     }
 
     public static void registerS2CPayloads() {
@@ -21,6 +22,7 @@ public class AstroCraftNetworking {
         ClientPlayNetworking.registerGlobalReceiver(WeatherChangedPayload.ID, WeatherChangedPayload::S2C);
         ClientPlayNetworking.registerGlobalReceiver(FTLJumpPayload.ID, FTLJumpPayload::S2C);
         ClientPlayNetworking.registerGlobalReceiver(ShipCommandPayload.ID, ShipCommandPayload::S2C);
+        ClientPlayNetworking.registerGlobalReceiver(PlayerFlashlightPayload.ID, PlayerFlashlightPayload::S2C);
     }
 
     public static void registerPayloads() {
@@ -39,5 +41,8 @@ public class AstroCraftNetworking {
 
         PayloadTypeRegistry.playC2S().register(ShipCommandPayload.ID, ShipCommandPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ShipCommandPayload.ID, ShipCommandPayload.CODEC);
+
+        PayloadTypeRegistry.playC2S().register(PlayerFlashlightPayload.ID, PlayerFlashlightPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(PlayerFlashlightPayload.ID, PlayerFlashlightPayload.CODEC);
     }
 }

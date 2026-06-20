@@ -1,5 +1,7 @@
 package com.cubikore.astro.math;
 
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 public class AstMath {
@@ -16,6 +18,21 @@ public class AstMath {
             degrees += 360.0f;
         }
         return degrees;
+    }
+
+    public static Vector2f lerp(Vector2f a, Vector2f b, float t) {
+        return new Vector2f(
+                a.x + (b.x - a.x) * t,
+                a.y + (b.y - a.y) * t
+        );
+    }
+
+    public static Vector3f lerp(Vector3f a, Vector3f b, float t) {
+        return new Vector3f(
+                a.x + (b.x - a.x) * t,
+                a.y + (b.y - a.y) * t,
+                a.z + (b.z - a.z) * t
+        );
     }
 
     public static Vector4f lerp(Vector4f a, Vector4f b, float t) {

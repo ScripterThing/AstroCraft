@@ -2,6 +2,7 @@ package com.cubikore.astro.client.renderer;
 
 import com.cubikore.astro.AstroCraft;
 import com.cubikore.astro.AstroCraftClient;
+import com.cubikore.astro.client.light.SpotLight;
 import com.cubikore.astro.client.renderer.post.AstroCraftPostProcessingManager;
 import foundry.veil.api.client.render.rendertype.VeilRenderType;
 import foundry.veil.api.event.VeilRenderLevelStageEvent;
@@ -12,11 +13,18 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AstroCraftRenderer {
     public static final Identifier PARTICLE_LAYER_P = Identifier.of(AstroCraft.MOD_ID, "astparticle");
     public static final Identifier UNLIT_LAYER = Identifier.of(AstroCraft.MOD_ID, "unlit");
 
     private final AstroCraftPostProcessingManager postProcessingManager;
+
+    private boolean shaderLightsDirty = false;
+
+    public List<SpotLight> spotLights = new ArrayList<>();
 
     private Camera camera;
 
@@ -30,8 +38,35 @@ public class AstroCraftRenderer {
         postProcessingManager.init();
     }
 
+    public void addLight(SpotLight spotLight) {
+        spotLights.add(spotLight);
+        markLightsDirty();
+    }
+
+    public void removeLights() {
+        spotLights.clear();
+        markLightsDirty();
+    }
+
+    public void clearRemovedLights() {
+        spotLights.removeIf(SpotLight::isRemoved);
+        markLightsDirty();
+    }
+
     public Camera getCamera() {
         return this.camera;
+    }
+
+    public void markLightsDirty() {
+        shaderLightsDirty = true;
+    }
+
+    public void markLightsClean() {
+        shaderLightsDirty = false;
+    }
+
+    public boolean lightsDirty() {
+        return shaderLightsDirty;
     }
 
     private void initEvents() {

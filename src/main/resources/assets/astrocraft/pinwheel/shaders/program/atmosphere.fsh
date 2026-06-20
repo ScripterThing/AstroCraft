@@ -293,7 +293,7 @@ void main() {
         if (rawDepth == 1 && dstToAtmosphere < INF && dstToAtmosphere >= VeilCamera.FarPlane)
             dstThroughAtmosphere = min(hitInfo.y, closDis - dstToAtmosphere);
 
-        if (dstThroughAtmosphere > 0.0 && (dstToAtmosphere <= 100000 || sphereId == 1) && rawDepth == 1) {
+        if (dstThroughAtmosphere > 0.0 && (dstToAtmosphere <= 50000 || sphereId == 1) && rawDepth == 1) {
             if (sphereId != 1) {
                 vec3 pointInAtmosphere = rayOrigin + rayDir * (dstToAtmosphere + epsilon);
 

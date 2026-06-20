@@ -2,18 +2,76 @@ package com.cubikore.astro.editor;
 
 import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
+import com.cubikore.astro.client.light.SpotLight;
 import com.cubikore.astro.weather.planet.ClientWeather;
 import foundry.veil.api.client.editor.SingleWindowInspector;
 import imgui.ImGui;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 public class InfoEditor extends SingleWindowInspector {
     @Override
     protected void renderComponents() {
-        World world = MinecraftClient.getInstance().world;
-        if(world != null) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        World world = client.world;
+        ClientPlayerEntity player = client.player;
+        if(world != null && player != null) {
+            ImGui.text("Spot Lights");
+            ImGui.indent();
+
+            if(ImGui.button("Add Spotlight")) {
+                SpotLight light = new SpotLight(new Vector3f(0), new Vector2f(0), 3f, 10f, 1.0f);
+
+                light.matchToView(client.gameRenderer.getCamera());
+
+                AstroCraftClient.renderer.addLight(light);
+            }
+
+            for(int i = 0; i < AstroCraftClient.renderer.spotLights.size(); i++) {
+                SpotLight spotLight = AstroCraftClient.renderer.spotLights.get(i);
+
+                ImGui.pushID("spotLight" + i);
+
+                ImGui.text(String.valueOf(i));
+                ImGui.indent();
+
+                if(ImGui.button("Match to view")) {
+                    spotLight.matchToView(client.gameRenderer.getCamera());
+                }
+
+                Vector3f pos = spotLight.getPosition();
+                Vector2f rot = spotLight.getRotation();
+
+                ImGui.text("Position X: " + pos.x + " Y: " + pos.y + " Z: " + pos.z);
+                ImGui.text("Rotation Pitch: " + rot.x + " Yaw: " + rot.y);
+
+                float[] radiusP = new float[]{spotLight.getRadius()};
+                float[] distanceP = new float[]{spotLight.getDistance()};
+                float[] brightnessP = new float[]{spotLight.getBrightness()};
+
+                if(ImGui.dragFloat("Radius", radiusP)) {
+                    spotLight.setRadius(radiusP[0]);
+                }
+
+                if(ImGui.dragFloat("Distance", distanceP)) {
+                    spotLight.setDistance(distanceP[0]);
+                }
+
+                if(ImGui.dragFloat("Brightness", brightnessP)) {
+                    spotLight.setBrightness(brightnessP[0]);
+                }
+
+                ImGui.unindent();
+
+                ImGui.popID();
+            }
+            ImGui.unindent();
+
             ImGui.text("World Offset:");
             ImGui.indent();
             ImGui.text("x: " + ClientStorage.renderedWorldOffset.x);
