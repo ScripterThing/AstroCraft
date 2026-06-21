@@ -12,5 +12,12 @@
   "astrocraft.mars": "Mars",
   "astrocraft.jupiter": "Jupiter",
   "astrocraft.uranus": "Uranus",
-  "astrocraft.neptune": "Neptune"
+  "astrocraft.neptune": "Neptune",
+
+  "item.astrocraft.space_suit_helmet": "Spacesuit Helmet",
+  "item.astrocraft.space_suit_chestplate": "Spacesuit Chestplate",
+  "item.astrocraft.space_suit_leggings": "Spacesuit Leggings",
+  "item.astrocraft.space_suit_boots": "Spacesuit Boots",
+
+  "item.astrocraft.color.info": "%1$s"
 }

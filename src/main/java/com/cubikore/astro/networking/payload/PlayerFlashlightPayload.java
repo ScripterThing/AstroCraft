@@ -3,11 +3,13 @@ package com.cubikore.astro.networking.payload;
 import com.cubikore.astro.AstroCraft;
 import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
+import com.cubikore.astro.item.AstroCraftItems;
 import com.cubikore.astro.ship.AstroCraftShip;
 import com.cubikore.astro.util.PlayerComponentAccess;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -40,10 +42,14 @@ public record PlayerFlashlightPayload(UUID playerUuid, boolean val) implements C
         PlayerEntity player = context.player();
         PlayerComponentAccess access = (PlayerComponentAccess) player;
 
-        access.setFlashlightOn(!access.isFlashlightOn());
+        boolean bl = access.isFlashlightOn();
 
-        for(ServerPlayerEntity serverPlayer : PlayerLookup.all(context.server())) {
-            ServerPlayNetworking.send(serverPlayer, new PlayerFlashlightPayload(player.getUuid(), access.isFlashlightOn()));
+        if(player.getEquippedStack(EquipmentSlot.HEAD).isOf(AstroCraftItems.SPACE_SUIT_HELMET)) {
+            access.setFlashlightOn(!access.isFlashlightOn());
+
+            for(ServerPlayerEntity serverPlayer : PlayerLookup.all(context.server())) {
+                ServerPlayNetworking.send(serverPlayer, new PlayerFlashlightPayload(player.getUuid(), access.isFlashlightOn()));
+            }
         }
     }
 

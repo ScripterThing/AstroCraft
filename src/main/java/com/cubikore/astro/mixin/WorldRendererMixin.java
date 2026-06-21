@@ -83,7 +83,7 @@ public class WorldRendererMixin {
         y -= ClientStorage.terrainOffset[1];
         z -= ClientStorage.terrainOffset[2];
 
-        if(client.player != null) {
+        if(client.player != null && client.options.getPerspective().isFirstPerson()) {
             PlayerComponentAccess access = (PlayerComponentAccess) client.player;
             LightRenderHandle<PointLightData> handle = access.getPointLightHandle();
             SpotLight spotLight = access.getPlayerSpotLight();
