@@ -16,6 +16,16 @@ repositories {
         url = 'https://maven.blamejared.com'
     }
 
+	maven {
+		name = 'GeckoLib'
+		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+		content {
+			includeGroup("software.bernie.geckolib")
+		}
+	}
+
+	maven { url = "https://api.modrinth.com/maven" }
+
 	exclusiveContent { // ImGuiMC
 		forRepository {
 			maven {
@@ -49,6 +59,11 @@ dependencies {
     }
 
 	modImplementation "foundry.imguimc:imguimc-fabric-${project.minecraft_version}:${project.imguimc_version}"
+
+	modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
+
+	modImplementation "maven.modrinth:handcrafted:4.0.3-fabric"
+	modImplementation "maven.modrinth:resourceful-lib:3.0.0-fabric"
 }
 
 processResources {

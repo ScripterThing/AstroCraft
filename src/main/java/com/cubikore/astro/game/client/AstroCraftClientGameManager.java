@@ -131,7 +131,7 @@ public class AstroCraftClientGameManager {
     }
 
     private void handleFlashlight(PlayerEntity player) {
-        if(AstroCraftUtil.timePassed(lastPressed) > 0.5f) {
+        if(AstroCraftUtil.timePassed(lastPressed) > 0.3f) {
             if(isKeyPressed(GLFW.GLFW_KEY_F)) {
                 capturePressed();
                 ClientPlayNetworking.send(new PlayerFlashlightPayload(player.getUuid(), true));
