@@ -1,6 +1,6 @@
 {
   "vertex": "astrocraft:bloom_blur_vert",
-  "fragment": "astrocraft:bloom_blur",
+  "fragment": "astrocraft:bloom_blur_vert",
   "textures": {
     "DepthSampler": {
       "type": "framebuffer",

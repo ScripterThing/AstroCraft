@@ -2,6 +2,7 @@ package com.cubikore.astro.client.gui.widget;
 
 import com.cubikore.astro.client.gui.action.ColorButtonAction;
 import com.cubikore.astro.math.AstMath;
+import com.cubikore.astro.util.ColorUtil;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -70,6 +71,6 @@ public class ColorButton extends AstButton {
             context.fill(x1 - borderWidth, y1 - borderWidth, x2 + borderWidth, y2 + borderWidth, 0xffffffff);
         }
 
-        context.fill(x1, y1, x2, y2, AstMath.toARGB(color));
+        context.fill(x1, y1, x2, y2, ColorUtil.toARGB(color));
     }
 }

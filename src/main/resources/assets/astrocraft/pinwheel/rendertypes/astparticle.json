@@ -6,23 +6,35 @@
   "affectsCrumbling": false,
   "outline": false,
   "layers": [
-    {
-      "type": "veil:shader",
-      "name": "astrocraft:particle"
-    },
-    {
-      "type": "minecraft:texture",
-      "texture": "minecraft:textures/atlas/particles.png",
-      "blur": false,
-      "mipmap": false
-    },
-    {
-      "type": "minecraft:depth_test",
-      "mode": "lequal"
-    },
-    {
-      "type": "minecraft:lightmap",
-      "enabled": true
-    }
+    [
+      {
+        "type": "veil:shader",
+        "name": "astrocraft:particle"
+      },
+      {
+        "type": "minecraft:texture",
+        "texture": "minecraft:textures/atlas/particles.png",
+        "blur": false,
+        "mipmap": false
+      },
+      {
+        "type": "minecraft:depth_test",
+        "mode": "lequal"
+      },
+      {
+        "type": "minecraft:lightmap",
+        "enabled": true
+      }
+    ],
+    [
+      {
+        "type": "veil:shader",
+        "name": "astrocraft:stencil_particle"
+      },
+      {
+        "type": "minecraft:output",
+        "framebuffer": "astrocraft:particle_stencil"
+      }
+    ]
   ]
 }

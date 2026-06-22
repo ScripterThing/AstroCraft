@@ -1,11 +1,4 @@
 {
   "vertex": "astrocraft:bloom_blur",
-  "fragment": "astrocraft:bloom_blur",
-  "uniforms": [
-    { "name": "InSize",           "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] },
-    { "name": "OutSize",          "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] },
-    { "name": "BlurDir",          "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] },
-    { "name": "Radius",           "type": "float",     "count": 1,  "values": [ 5.0 ] },
-    { "name": "RadiusMultiplier", "type": "float",     "count": 1,  "values": [ 1.0 ] }
-  ]
+  "fragment": "astrocraft:bloom_blur"
 }

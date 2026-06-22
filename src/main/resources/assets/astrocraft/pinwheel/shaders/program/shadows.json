@@ -33,9 +33,23 @@
       "type": "framebuffer",
       "name": "veil:first_person:depth"
     },
+    "HandNormalSampler": {
+      "type": "framebuffer",
+      "name": "veil:first_person",
+      "sampler": 2
+    },
+    "ParticlesSampler": {
+      "type": "framebuffer",
+      "name": "astrocraft:particle_stencil"
+    },
+    "ParticlesDepthSampler": {
+      "type": "framebuffer",
+      "name": "astrocraft:particle_stencil:depth"
+    },
     "NoiseTex": {
       "type": "location",
       "location": "astrocraft:textures/shader/rnoise.png"
     }
+
   }
 }

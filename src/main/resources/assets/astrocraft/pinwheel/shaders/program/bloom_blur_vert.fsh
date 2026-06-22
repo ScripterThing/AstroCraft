@@ -6,17 +6,20 @@ in vec2 texCoord;
 out vec4 fragColor;
 
 in vec2 sampleStep;
-in vec2 texCoord;
 
 uniform float Radius = 10.0;
 uniform float RadiusMultiplier = 1.0;
 
+uniform float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
 void main() {
-    vec4 blurred = vec4(0.0);
-    float actualRadius = round(Radius * RadiusMultiplier);
-    for (float a = -actualRadius + 0.5; a <= actualRadius; a += 2.0) {
-        blurred += texture(DiffuseSampler0, texCoord + sampleStep * a);
+    vec2 tex_offset = vec2(1.0) / textureSize(DiffuseSampler0, 0); // gets size of single texel
+    vec3 result = texture(DiffuseSampler0, texCoord).rgb * weight[0]; // current fragment's contribution
+
+    for(int i = 1; i < 5; ++i)
+    {
+        result += texture(DiffuseSampler0, texCoord + vec2(0.0, tex_offset.y * i)).rgb * weight[i];
+        result += texture(DiffuseSampler0, texCoord - vec2(0.0, tex_offset.y * i)).rgb * weight[i];
     }
-    blurred += texture(DiffuseSampler0, texCoord + sampleStep * actualRadius) / 2.0;
-    fragColor = blurred / (actualRadius + 0.5);
+
+    fragColor = vec4(result, 1.0);
 }

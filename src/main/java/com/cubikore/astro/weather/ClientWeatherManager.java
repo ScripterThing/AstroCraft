@@ -26,7 +26,7 @@ public class ClientWeatherManager {
                 clientWeatherTypes.add(type);
         }
 
-        supportedPlanets.add(planetId.getPath());
+        supportedPlanets.add(planetId.getNamespace() + ":" + planetId.getPath());
 
         clientWeatherMap.put(planetId, weather);
     }

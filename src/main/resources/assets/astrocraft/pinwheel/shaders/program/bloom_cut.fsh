@@ -15,7 +15,7 @@ void main() {
     float avg = (color.r + color.g + color.b) / 3.0;
     float weighted = conv(avg);
 
-    if(weighted > 0.8) {
+    if(weighted > 0.95) {
         fragColor = vec4(1);
         return;
     }

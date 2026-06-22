@@ -28,7 +28,7 @@ public class VenusClientWeather extends ClientWeather {
 
         this.weatherTransitionSpeed = 0.15f;
 
-        this.setSunBrightness(2f);
+        this.setSunBrightness(4f);
         this.setSunOrientation(new float[]{45f, -45f});
         this.setSunColor(new float[]{0.988f, 0.921f, 0.662f});
         this.setFogColor(new float[]{0.85f, 0.63f, 0.23f});
@@ -50,7 +50,7 @@ public class VenusClientWeather extends ClientWeather {
             this.targetAtmosphereConditions.fogDistance = 20f;
             this.targetAtmosphereConditions.lightDarkFactor = 0f;
 
-            this.targetAtmosphereConditions.sunBrightness = 0.3f;
+            this.targetAtmosphereConditions.sunBrightness = 1f;
 
             this.targetAtmosphereConditions.sunSize = 900f;
             this.targetAtmosphereConditions.sunWhiteSize = 1000f;
@@ -59,7 +59,6 @@ public class VenusClientWeather extends ClientWeather {
             AstroCraftClient.clientGameManager.particleManager.addEmitter(new VenusAcidRainParticleEmitter(new Vector2f(0.025f), 500));
         }
         else if (type.equals("clear")) {
-            this.targetAtmosphereConditions.sunBrightness = 2f;
             gameManager.particleManager.stopEmitterType(VenusAcidRainParticleEmitter.class);
 
             gameManager.particleManager.addEmitter(new VenusAtmosphereParticleEmitter(new Vector2f(0.0625f, 0.025f),0.04f, 255, 203, 33, 150));

@@ -6,10 +6,10 @@ in vec2 texCoord;
 out vec4 fragColor;
 
 void main() {
-    vec4 bloomBlur = texture(DiffuseSampler0, texCoord);
+    vec3 bloomBlur = texture(DiffuseSampler0, texCoord).rgb;
     vec3 mainColor = texture(MainSampler, texCoord).rgb;
 
-    vec3 color = mainColor + bloomBlur.r;
+    vec3 color = mainColor + bloomBlur;
 
     fragColor = vec4(color, 1.0);
 }

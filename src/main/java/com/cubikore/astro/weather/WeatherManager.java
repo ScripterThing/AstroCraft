@@ -34,6 +34,7 @@ public class WeatherManager {
                 for(ServerPlayerEntity player : PlayerLookup.all(server)) {
                     Identifier from = Universe.getPlanetIdFromWorld(player.getWorld().getRegistryKey());
                     sendWeatherState(player, false, from);
+                    System.out.println("Donesss " + player.getName().getString());
                 }
             }
 

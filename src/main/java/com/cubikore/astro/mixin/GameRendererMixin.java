@@ -79,7 +79,8 @@ public class GameRendererMixin {
             "getRenderTypeEntitySolidProgram",
             "getRenderTypeEntityCutoutProgram",
             "getRenderTypeEntityCutoutNoNullProgram",
-            "getRenderTypeEntityTranslucentCullProgram"
+            "getRenderTypeEntityTranslucentCullProgram",
+            "getRenderTypeArmorCutoutNoCullProgram"
     }, at = @At("TAIL"), cancellable = true)
     private static void setEntityShader(CallbackInfoReturnable<ShaderProgram> cir) {
         if(ShadowRenderer.isRenderingShadowMap()) {

@@ -1,0 +1,4 @@
+{
+  "vertex": "astrocraft:particle",
+  "fragment": "astrocraft:stencil_particle"
+}

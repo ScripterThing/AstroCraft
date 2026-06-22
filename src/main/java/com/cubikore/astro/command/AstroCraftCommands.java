@@ -13,6 +13,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.argument.IdentifierArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -20,38 +22,41 @@ import net.minecraft.util.Identifier;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AstroCraftCommands {
     public static void registerCommands() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
                     dispatcher.register(
                             CommandManager.literal("setplanetweather")
-                                    .then(CommandManager.argument("planet", StringArgumentType.word())
+                                    .then(CommandManager.argument("planet", IdentifierArgumentType.identifier())
                                             .suggests((context, builder) -> {
+                                                List<Identifier> ids = new ArrayList<>();
                                                 for (String planet : AstroCraftClient.clientGameManager.weatherManager.supportedPlanets) {
-                                                    builder.suggest(planet);
+                                                    ids.add(Identifier.tryParse(planet));
                                                 }
-                                                return builder.buildFuture();
+                                                return CommandSource.suggestIdentifiers(ids, builder);
                                             })
                                             .then(CommandManager.argument("weather_type", StringArgumentType.word())
                                                     .suggests((context, builder) -> {
                                                         for (String type : AstroCraftClient.clientGameManager.weatherManager.clientWeatherTypes) {
                                                             builder.suggest(type);
                                                         }
+
                                                         return builder.buildFuture();
                                                     })
                                                     .then(CommandManager.argument("duration_ticks", IntegerArgumentType.integer(1, Integer.MAX_VALUE))
                                                             .then(CommandManager.argument("intensity", FloatArgumentType.floatArg(0, 10))
                                                                     .executes(context -> {
-                                                                        String planet = StringArgumentType.getString(context, "planet");
+                                                                        Identifier planetId = IdentifierArgumentType.getIdentifier(context, "planet");
                                                                         String type = StringArgumentType.getString(context, "weather_type");
                                                                         int duration = IntegerArgumentType.getInteger(context, "duration_ticks");
                                                                         float intensity = FloatArgumentType.getFloat(context, "intensity");
 
-                                                                        Identifier planetId = Identifier.tryParse(planet);
-
                                                                         AstroCraft.serverGameManager.weatherManager.setWeather(planetId, new PlanetWeather(type, duration, intensity));
 
-                                                                        String feedbackString = "Set weather of " + planet + " to " + type + " for " + duration + " ticks with intensity of " + intensity;
+                                                                        String feedbackString = "Set weather of " + planetId.toString() + " to " + type + " for " + duration + " ticks with intensity of " + intensity;
 
                                                                         context.getSource().sendFeedback(() -> Text.literal(feedbackString), false);
 

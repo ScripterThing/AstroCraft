@@ -6,7 +6,9 @@ import com.cubikore.astro.client.light.SpotLight;
 import com.cubikore.astro.components.AstComponents;
 import com.cubikore.astro.dimension.DimensionKeys;
 import com.cubikore.astro.item.AstroCraftItems;
+import com.cubikore.astro.math.AstMath;
 import com.cubikore.astro.texture.AstrocraftTextures;
+import com.cubikore.astro.util.ColorUtil;
 import com.cubikore.astro.util.EntityUtils;
 import com.cubikore.astro.util.PlayerComponentAccess;
 import foundry.veil.api.client.render.VeilRenderSystem;
@@ -140,17 +142,18 @@ public class PlayerEntityRendererMixin {
             playerEntityModel.setAngles(player, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
             arm.pitch = 0.0F;
 
-            String color = stack.get(AstComponents.SUIT_COLOR_COMPONENT);
-            Formatting tint = Formatting.byName(color);
+            String colorString = stack.get(AstComponents.SUIT_COLOR_COMPONENT);
 
-            if(tint == null)
+            if(colorString == null)
                 return;
 
+            int color = ColorUtil.getSuitARGB(colorString);
+
             Identifier identifier = AstrocraftTextures.SUIT_HAND;
-            arm.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(identifier)), light, OverlayTexture.DEFAULT_UV, tint.getColorValue());
+            arm.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(identifier)), light, OverlayTexture.DEFAULT_UV, color);
 
             sleeve.pitch = 0.0F;
-            sleeve.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(identifier)), light, OverlayTexture.DEFAULT_UV, tint.getColorValue());
+            sleeve.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(identifier)), light, OverlayTexture.DEFAULT_UV, color);
             ci.cancel();
         }
     }

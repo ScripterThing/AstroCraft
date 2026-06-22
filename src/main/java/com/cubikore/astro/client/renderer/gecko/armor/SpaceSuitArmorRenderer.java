@@ -4,6 +4,7 @@ import com.cubikore.astro.AstroCraft;
 import com.cubikore.astro.client.model.SpaceSuitArmorModel;
 import com.cubikore.astro.components.AstComponents;
 import com.cubikore.astro.item.special.SpaceSuitArmorItem;
+import com.cubikore.astro.util.ColorUtil;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -33,10 +34,9 @@ public class SpaceSuitArmorRenderer extends GeoArmorRenderer<SpaceSuitArmorItem>
     @Override
     public Color getRenderColor(SpaceSuitArmorItem animatable, float partialTick, int packedLight) {
         String color = currentStack.get(AstComponents.SUIT_COLOR_COMPONENT);
-        Formatting tint = Formatting.byName(color);
 
-        if(tint != null)
-            return Color.ofOpaque(tint.getColorValue());
+        if(color != null)
+            return Color.ofOpaque(ColorUtil.getSuitARGB(color));
 
         return Color.WHITE;
     }

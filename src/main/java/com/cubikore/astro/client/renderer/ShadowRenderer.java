@@ -1,19 +1,26 @@
 package com.cubikore.astro.client.renderer;
 
 import com.cubikore.astro.AstroCraft;
+import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
 import com.cubikore.astro.mixin.WorldRendererAccessor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.systems.VertexSorter;
 import foundry.veil.api.client.render.VeilRenderSystem;
 import foundry.veil.api.client.render.framebuffer.AdvancedFbo;
+import foundry.veil.api.client.render.rendertype.VeilRenderType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
+import org.joml.Matrix4fStack;
+import org.joml.Quaternionf;
+
 
 public class ShadowRenderer {
     public static Matrix4f lightSpaceMatrix = new Matrix4f();
@@ -22,11 +29,14 @@ public class ShadowRenderer {
 
     public static void render(MinecraftClient client, Camera camera, MatrixStack matrices, VertexConsumerProvider.Immediate bufferSource, float tickDelta) {
         Vec3d camPos = camera.getPos();
-        WorldRendererAccessor accessor = (WorldRendererAccessor) client.worldRenderer;
+        WorldRenderer worldRenderer = client.worldRenderer;
+        WorldRendererAccessor accessor = (WorldRendererAccessor) worldRenderer;
 
         MatrixStack shadowModelView = createShadowModelView(camPos.x, camPos.y, camPos.z);
         Matrix4f shadowProjMat = createProjMat();
         Matrix4f backUpProjMat = RenderSystem.getProjectionMatrix();
+
+        Quaternionf rot = shadowModelView.peek().getPositionMatrix().getUnnormalizedRotation(new Quaternionf());
 
         int width = client.getFramebuffer().textureWidth;
         int height = client.getFramebuffer().textureHeight;
@@ -52,14 +62,16 @@ public class ShadowRenderer {
             RenderSystem.disableCull();
 
             accessor.invokeRenderLayer(RenderLayer.getSolid(), camPos.x, camPos.y, camPos.z, shadowModelView.peek().getPositionMatrix(), shadowProjMat);
-            accessor.invokeRenderLayer(RenderLayer.getCutoutMipped(), camPos.x, camPos.y, camPos.z, shadowModelView.peek().getPositionMatrix(), shadowProjMat);
             accessor.invokeRenderLayer(RenderLayer.getCutout(), camPos.x, camPos.y, camPos.z, shadowModelView.peek().getPositionMatrix(), shadowProjMat);
+            accessor.invokeRenderLayer(RenderLayer.getCutoutMipped(), camPos.x, camPos.y, camPos.z, shadowModelView.peek().getPositionMatrix(), shadowProjMat);
+
+            EntityRenderDispatcher dispatcher = ((WorldRendererAccessor) worldRenderer).getEntityRenderDispatcher();
 
             if(client.world != null) {
                 VertexConsumerProvider.Immediate immediate = accessor.getBufferBuilders().getEntityVertexConsumers();
 
                 for(Entity entity : client.world.getEntities()) {
-                    if(accessor.getEntityRenderDispatcher().shouldRender(entity, accessor.getFrustum(), camPos.x, camPos.y, camPos.z) || entity.isSpectator()) {
+                    if(dispatcher.shouldRender(entity, accessor.getFrustum(), camPos.x, camPos.y, camPos.z) || entity.isSpectator() ) {
                         accessor.invokeRenderEntity(entity, camPos.x, camPos.y, camPos.z, tickDelta, shadowModelView, immediate);
                     }
                 }

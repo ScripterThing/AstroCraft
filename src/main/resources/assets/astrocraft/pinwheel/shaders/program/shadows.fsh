@@ -129,8 +129,12 @@ uniform sampler2D ShadowDepthSampler;
 uniform sampler2D NormalSampler;
 uniform sampler2D NoiseTex;
 uniform sampler2D AlbedoSampler;
+uniform sampler2D AlbedoDepthSampler;
 uniform sampler2D HandSampler;
 uniform sampler2D HandDepthSampler;
+uniform sampler2D HandNormalSampler;
+uniform sampler2D ParticlesSampler;
+uniform sampler2D ParticlesDepthSampler;
 
 uniform int inSpace;
 uniform float brightness;
@@ -204,8 +208,6 @@ vec4 getShadow(vec4 incolor, vec2 texCoord, vec3 viewPos, vec4 normal, mat4 view
     vec3 orgColor = texture(DiffuseSampler, texCoord).rgb;
     vec4 color = incolor;
 
-    float handDepth = texture(HandDepthSampler, texCoord).r;
-
     vec3 fwd = vec3(viewMatrix[0][2], viewMatrix[1][2], viewMatrix[2][2]);
     vec3 lightDir = normalize(-fwd);
 
@@ -232,11 +234,20 @@ vec4 getShadow(vec4 incolor, vec2 texCoord, vec3 viewPos, vec4 normal, mat4 view
         }
     }
 
-    vec3 handColor = texture(HandSampler, texCoord).rgb;
-    vec3 albedoColor = depth2 < handDepth ? texture(AlbedoSampler, texCoord).rgb : handColor;
-
     shadowSum /= pow(2.0 * SHADOW_SAMPLES + 1.0, 2.0);
-    //color.rgb *= (clamp(shadowSum, 1.0 - SHADOW_STRENGTH, 1.0)) * LIGHT_COLOR;
+
+    float particleDepth = texture(ParticlesDepthSampler, texCoord).r;
+    vec4 particles = texture(ParticlesSampler, texCoord);
+
+    vec4 hCol = texture(HandSampler, texCoord);
+    vec3 handColor = hCol.rgb;
+
+    vec3 albedoColor = hCol.a == 0 ? texture(AlbedoSampler, texCoord).rgb : handColor;
+
+    if(particleDepth < 1 && particleDepth <= depth2) {
+        albedoColor = particles.rgb;
+        diff = 1.0;
+    }
 
     vec3 shadowed = orgColor * (1.0 - SHADOW_STRENGTH);
     vec3 inSpaceColor = mix(shadowed, albedoColor * lightColor * brightness, shadowSum * diff);
@@ -248,8 +259,7 @@ vec4 getShadow(vec4 incolor, vec2 texCoord, vec3 viewPos, vec4 normal, mat4 view
     vec3 finalInSpaceCol = lumInSpace > lumOrg ? inSpaceColor : orgColor;
     vec3 finalColor = inSpace == 1 ? finalInSpaceCol : outOfSpaceColor;
 
-    color.rgb = handDepth >= 1 ? finalColor : orgColor;// inSpace == 0 ? outOfSpaceColor : inSpaceColor;
-    //        color.rgb = texture(ShadowSampler, shadowScreenSpace.xy + offset).rgb;
+    color.rgb = finalColor;
 
     return color;
 }
@@ -257,7 +267,10 @@ vec4 getShadow(vec4 incolor, vec2 texCoord, vec3 viewPos, vec4 normal, mat4 view
 void main() {
     vec4 color = texture(DiffuseSampler, texCoord);
 
-    vec4 normal = texture(NormalSampler, texCoord);
+    float handDepth = texture(HandDepthSampler, texCoord).r;
+    float albedoDepth = texture(AlbedoDepthSampler, texCoord).r;
+
+    vec4 normal = albedoDepth < handDepth ? texture(NormalSampler, texCoord) : texture(HandNormalSampler, texCoord);
     float depth = texture(DepthSampler, texCoord).r;
     vec3 viewPos = screenToViewSpace(texCoord, depth).xyz;
 
