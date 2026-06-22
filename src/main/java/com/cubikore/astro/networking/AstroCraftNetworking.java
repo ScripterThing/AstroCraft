@@ -12,6 +12,7 @@ public class AstroCraftNetworking {
         ServerPlayNetworking.registerGlobalReceiver(ShipCommandPayload.ID, ShipCommandPayload::C2S);
         ServerPlayNetworking.registerGlobalReceiver(FTLJumpPayload.ID, FTLJumpPayload::C2S);
         ServerPlayNetworking.registerGlobalReceiver(PlayerFlashlightPayload.ID, PlayerFlashlightPayload::C2S);
+        ServerPlayNetworking.registerGlobalReceiver(ArmorCustomizationPayload.ID, ArmorCustomizationPayload::C2S);
     }
 
     public static void registerS2CPayloads() {
@@ -44,5 +45,7 @@ public class AstroCraftNetworking {
 
         PayloadTypeRegistry.playC2S().register(PlayerFlashlightPayload.ID, PlayerFlashlightPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(PlayerFlashlightPayload.ID, PlayerFlashlightPayload.CODEC);
+
+        PayloadTypeRegistry.playC2S().register(ArmorCustomizationPayload.ID, ArmorCustomizationPayload.CODEC);
     }
 }

@@ -1,6 +1,5 @@
-package com.cubikore.astro.client.screen;
+package com.cubikore.astro.client.gui.screen;
 
-import com.cubikore.astro.AstroCraft;
 import com.cubikore.astro.client.ClientStorage;
 import com.cubikore.astro.gui.AstroCraftSprites;
 import com.cubikore.astro.networking.payload.ShipCommandPayload;
@@ -8,15 +7,12 @@ import com.cubikore.astro.universe.Planet;
 import com.cubikore.astro.universe.Universe;
 import com.cubikore.astro.util.VectorMath;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextIconButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;

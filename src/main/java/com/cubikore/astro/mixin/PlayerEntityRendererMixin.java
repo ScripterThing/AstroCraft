@@ -1,17 +1,23 @@
 package com.cubikore.astro.mixin;
 
 import com.cubikore.astro.AstroCraftClient;
+import com.cubikore.astro.client.ClientStorage;
 import com.cubikore.astro.client.light.SpotLight;
+import com.cubikore.astro.components.AstComponents;
 import com.cubikore.astro.dimension.DimensionKeys;
 import com.cubikore.astro.item.AstroCraftItems;
+import com.cubikore.astro.texture.AstrocraftTextures;
 import com.cubikore.astro.util.EntityUtils;
 import com.cubikore.astro.util.PlayerComponentAccess;
 import foundry.veil.api.client.render.VeilRenderSystem;
 import foundry.veil.api.client.render.light.data.PointLightData;
 import foundry.veil.api.client.render.light.renderer.LightRenderHandle;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
@@ -23,9 +29,7 @@ import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.Arm;
-import net.minecraft.util.Hand;
-import net.minecraft.util.UseAction;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -119,6 +123,35 @@ public class PlayerEntityRendererMixin {
         }
         else {
             lightData.setBrightness(0);
+        }
+    }
+
+    @Inject(at = @At("HEAD"), method = "renderArm", cancellable = true)
+    private void handleSuitArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientPlayerEntity player, ModelPart arm, ModelPart sleeve, CallbackInfo ci) {
+        ItemStack stack = player.getEquippedStack(EquipmentSlot.CHEST);
+        if(ClientStorage.renderingFpsHand && stack.isOf(AstroCraftItems.SPACE_SUIT_CHESTPLATE)) {
+            PlayerEntityRenderer renderer = ((PlayerEntityRenderer) (Object) this);
+            PlayerEntityModel<AbstractClientPlayerEntity> playerEntityModel = renderer.getModel();
+            PlayerEntityRendererAccessor accessor = (PlayerEntityRendererAccessor) renderer;
+            accessor.invokeSetModelPose(player);
+            playerEntityModel.handSwingProgress = 0.0F;
+            playerEntityModel.sneaking = false;
+            playerEntityModel.leaningPitch = 0.0F;
+            playerEntityModel.setAngles(player, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+            arm.pitch = 0.0F;
+
+            String color = stack.get(AstComponents.SUIT_COLOR_COMPONENT);
+            Formatting tint = Formatting.byName(color);
+
+            if(tint == null)
+                return;
+
+            Identifier identifier = AstrocraftTextures.SUIT_HAND;
+            arm.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntitySolid(identifier)), light, OverlayTexture.DEFAULT_UV, tint.getColorValue());
+
+            sleeve.pitch = 0.0F;
+            sleeve.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(identifier)), light, OverlayTexture.DEFAULT_UV, tint.getColorValue());
+            ci.cancel();
         }
     }
 

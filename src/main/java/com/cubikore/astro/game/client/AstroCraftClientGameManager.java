@@ -4,6 +4,7 @@ import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
 import com.cubikore.astro.client.cutscene.CutsceneManager;
 import com.cubikore.astro.client.cutscene.FTLJumpCutscene;
+import com.cubikore.astro.client.gui.screen.ArmorCustomizationScreen;
 import com.cubikore.astro.client.light.PositionPointLightData;
 import com.cubikore.astro.dimension.DimensionKeys;
 import com.cubikore.astro.events.client.AstroCraftClientWeatherEvents;
@@ -115,7 +116,7 @@ public class AstroCraftClientGameManager {
                 if(player.hasVehicle() && player.getVehicle() instanceof DisplayEntity.TextDisplayEntity entity && CommonStorage.captainSeatEntities.containsKey(player.getVehicle().getBlockPos()))
                     handleShipMovements();
 
-                handleFlashlight(player);
+                handleFlashlight(client, player);
 
                 cutsceneManager.tick(client);
             }
@@ -130,11 +131,16 @@ public class AstroCraftClientGameManager {
         ClientStorage.windStrength = (float) strength;
     }
 
-    private void handleFlashlight(PlayerEntity player) {
+    private void handleFlashlight(MinecraftClient client, PlayerEntity player) {
         if(AstroCraftUtil.timePassed(lastPressed) > 0.3f) {
-            if(isKeyPressed(GLFW.GLFW_KEY_F)) {
+            if(isKeyPressed(GLFW.GLFW_KEY_F) && client.currentScreen == null) {
                 capturePressed();
                 ClientPlayNetworking.send(new PlayerFlashlightPayload(player.getUuid(), true));
+            }
+
+            if(isKeyPressed(GLFW.GLFW_KEY_G) && client.currentScreen == null) {
+                capturePressed();
+                client.setScreen(new ArmorCustomizationScreen());
             }
         }
     }

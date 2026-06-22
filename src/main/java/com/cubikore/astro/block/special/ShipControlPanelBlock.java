@@ -1,6 +1,6 @@
 package com.cubikore.astro.block.special;
 
-import com.cubikore.astro.client.screen.ControlPanelScreen;
+import com.cubikore.astro.client.gui.screen.ControlPanelScreen;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;

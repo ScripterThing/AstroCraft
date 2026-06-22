@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "astrocraft:item/space_suit_leggins"
+    "layer0": "astrocraft:item/space_suit_leggings"
   }
 }

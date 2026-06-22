@@ -15,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,6 +35,16 @@ public class GameRendererMixin {
     @Final
     @Shadow
     MinecraftClient client;
+
+    @Inject(at = @At("HEAD"), method = "renderHand")
+    private void handlerHand(Camera camera, float tickDelta, Matrix4f matrix4f, CallbackInfo ci) {
+        ClientStorage.renderingFpsHand = true;
+    }
+
+    @Inject(at = @At("RETURN"), method = "renderHand")
+    private void handlerhandlerhandler(Camera camera, float tickDelta, Matrix4f matrix4f, CallbackInfo ci) {
+        ClientStorage.renderingFpsHand = false;
+    }
 
     @Inject(at = @At("HEAD"), method = "bobView", cancellable = true)
     private void changeBobbing(MatrixStack matrices, float tickDelta, CallbackInfo ci) {

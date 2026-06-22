@@ -5,6 +5,20 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 public class AstMath {
+    public static int getARGB(String color) {
+        return switch (color) {
+            case "black" -> 0xFF000000;
+            case "dark_blue" -> 0xFF0000AA;
+            case "dark_green" -> 0xFF00AA00;
+            case "dark_aqua" -> 0xFF00AAAA;
+            default -> 0x00000000;
+        };
+    }
+
+    public static int toARGB(int rgb) {
+        return 0xFF000000 | rgb;
+    }
+
     public static float mod(float x, float y) {
         return (float)(x - y * Math.floor(x / y));
     }

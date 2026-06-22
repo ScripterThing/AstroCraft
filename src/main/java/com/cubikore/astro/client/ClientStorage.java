@@ -32,4 +32,6 @@ public class ClientStorage {
     public static float[] sunOrientation = new float[]{45f, 45f};
     public static float[] sunColor = new float[]{0.988f, 0.921f, 0.662f};
     public static float[] sunBrightness = new float[]{1f};
+
+    public static boolean renderingFpsHand = false;
 }
