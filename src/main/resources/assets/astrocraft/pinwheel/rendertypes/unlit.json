@@ -6,23 +6,49 @@
   "affectsCrumbling": false,
   "outline": false,
   "layers": [
-    {
-      "type": "veil:shader",
-      "name": "astrocraft:unlit"
-    },
-    {
-      "type": "minecraft:texture",
-      "texture": "minecraft:textures/atlas/blocks.png",
-      "blur": false,
-      "mipmap": false
-    },
-    {
-      "type": "minecraft:depth_test",
-      "mode": "lequal"
-    },
-    {
-      "type": "minecraft:lightmap",
-      "enabled": false
-    }
+    [
+      {
+        "type": "veil:shader",
+        "name": "astrocraft:unlit"
+      },
+      {
+        "type": "minecraft:output",
+        "framebuffer": "astrocraft:unlit_stencil"
+      },
+      {
+        "type": "minecraft:texture",
+        "texture": "minecraft:textures/atlas/blocks.png",
+        "blur": false,
+        "mipmap": false
+      },
+      {
+        "type": "minecraft:depth_test",
+        "mode": "lequal"
+      },
+      {
+        "type": "minecraft:lightmap",
+        "enabled": false
+      }
+    ],
+    [
+      {
+        "type": "veil:shader",
+        "name": "astrocraft:unlit_main"
+      },
+      {
+        "type": "minecraft:texture",
+        "texture": "minecraft:textures/atlas/blocks.png",
+        "blur": false,
+        "mipmap": false
+      },
+      {
+        "type": "minecraft:depth_test",
+        "mode": "lequal"
+      },
+      {
+        "type": "minecraft:lightmap",
+        "enabled": false
+      }
+    ]
   ]
 }

@@ -56,7 +56,7 @@ public class VenusClientWeather extends ClientWeather {
             this.targetAtmosphereConditions.sunWhiteSize = 1000f;
 
             AstroCraftClient.clientGameManager.particleManager.stopEmitterType(VenusAtmosphereParticleEmitter.class);
-            AstroCraftClient.clientGameManager.particleManager.addEmitter(new VenusAcidRainParticleEmitter(new Vector2f(0.025f), 500));
+            AstroCraftClient.clientGameManager.particleManager.addEmitter(new VenusAcidRainParticleEmitter(new Vector2f(0.025f), 1000));
         }
         else if (type.equals("clear")) {
             gameManager.particleManager.stopEmitterType(VenusAcidRainParticleEmitter.class);

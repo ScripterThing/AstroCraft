@@ -36,6 +36,7 @@ public class AstroCraftPostProcessingManager {
     public static Identifier PLANET_FOG_ID = Identifier.of(AstroCraft.MOD_ID, "planetfog");
     public static Identifier BLOOM_ID = Identifier.of(AstroCraft.MOD_ID, "bloom");
     public static Identifier SHADOWS_ID = Identifier.of(AstroCraft.MOD_ID, "shadows");
+    public static Identifier UNLIT_COMBINE_ID = Identifier.of(AstroCraft.MOD_ID, "unlit_combine");
 
     private final AstroCraftRenderer renderer;
 
@@ -59,6 +60,7 @@ public class AstroCraftPostProcessingManager {
 
                 PostProcessingManager postProcessingManager = renderer.getPostProcessingManager();
 
+                postProcessingManager.add(UNLIT_COMBINE_ID);
                 postProcessingManager.add(SHADOWS_ID);
                 postProcessingManager.add(PLANETS_ID);
                 postProcessingManager.add(PLANET_FOG_ID);

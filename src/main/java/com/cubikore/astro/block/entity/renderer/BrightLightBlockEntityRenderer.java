@@ -10,9 +10,14 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import org.joml.Matrix4f;
+
+import java.util.List;
 
 public class BrightLightBlockEntityRenderer implements BlockEntityRenderer<BrightLightBlockEntity> {
     public BrightLightBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
@@ -33,7 +38,8 @@ public class BrightLightBlockEntityRenderer implements BlockEntityRenderer<Brigh
         BakedModel model = client.getBlockRenderManager()
                 .getModel(entity.getCachedState());
 
-        Sprite sprite = model.getParticleSprite();
+        List<BakedQuad> quads = model.getQuads(null, Direction.NORTH, Random.create());
+        Sprite sprite = quads.getFirst().getSprite();
 
         float u0 = sprite.getMinU();
         float u1 = sprite.getMaxU();

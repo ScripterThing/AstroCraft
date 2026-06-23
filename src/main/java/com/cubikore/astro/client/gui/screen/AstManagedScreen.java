@@ -1,6 +1,7 @@
 package com.cubikore.astro.client.gui.screen;
 
 import com.cubikore.astro.client.gui.widget.AstButton;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -17,11 +18,22 @@ public class AstManagedScreen extends Screen {
     }
 
     protected void addButton(AstButton button) {
+        button.setScreen(this);
         buttons.add(button);
     }
 
     protected void addButtons(AstButton... buttons) {
-        this.buttons.addAll(List.of(buttons));
+        for(AstButton button : buttons) {
+            addButton(button);
+        }
+    }
+
+    protected void clearButtons() {
+        this.buttons.clear();
+    }
+
+    public TextRenderer getTextRenderer() {
+        return this.textRenderer;
     }
 
     @Override

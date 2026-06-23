@@ -1,25 +1,20 @@
 package com.cubikore.astro.client.renderer;
 
 import com.cubikore.astro.AstroCraft;
-import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
 import com.cubikore.astro.mixin.WorldRendererAccessor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.systems.VertexSorter;
 import foundry.veil.api.client.render.VeilRenderSystem;
 import foundry.veil.api.client.render.framebuffer.AdvancedFbo;
-import foundry.veil.api.client.render.rendertype.VeilRenderType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
-import org.joml.Matrix4fStack;
-import org.joml.Quaternionf;
 
 
 public class ShadowRenderer {
@@ -35,8 +30,6 @@ public class ShadowRenderer {
         MatrixStack shadowModelView = createShadowModelView(camPos.x, camPos.y, camPos.z);
         Matrix4f shadowProjMat = createProjMat();
         Matrix4f backUpProjMat = RenderSystem.getProjectionMatrix();
-
-        Quaternionf rot = shadowModelView.peek().getPositionMatrix().getUnnormalizedRotation(new Quaternionf());
 
         int width = client.getFramebuffer().textureWidth;
         int height = client.getFramebuffer().textureHeight;

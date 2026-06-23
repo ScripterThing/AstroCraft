@@ -135,6 +135,7 @@ uniform sampler2D HandDepthSampler;
 uniform sampler2D HandNormalSampler;
 uniform sampler2D ParticlesSampler;
 uniform sampler2D ParticlesDepthSampler;
+uniform sampler2D UnlitDepthSampler;
 
 uniform int inSpace;
 uniform float brightness;
@@ -208,6 +209,11 @@ vec4 getShadow(vec4 incolor, vec2 texCoord, vec3 viewPos, vec4 normal, mat4 view
     vec3 orgColor = texture(DiffuseSampler, texCoord).rgb;
     vec4 color = incolor;
 
+    float unlitDepth = texture(UnlitDepthSampler, texCoord).r;
+
+    if(unlitDepth == depth2)
+            return incolor;
+
     vec3 fwd = vec3(viewMatrix[0][2], viewMatrix[1][2], viewMatrix[2][2]);
     vec3 lightDir = normalize(-fwd);
 
@@ -244,14 +250,17 @@ vec4 getShadow(vec4 incolor, vec2 texCoord, vec3 viewPos, vec4 normal, mat4 view
 
     vec3 albedoColor = hCol.a == 0 ? texture(AlbedoSampler, texCoord).rgb : handColor;
 
+    float lightBrightness = brightness;
+
     if(particleDepth < 1 && particleDepth <= depth2) {
         albedoColor = particles.rgb;
         diff = 1.0;
+        lightBrightness /= 2;
     }
 
     vec3 shadowed = orgColor * (1.0 - SHADOW_STRENGTH);
-    vec3 inSpaceColor = mix(shadowed, albedoColor * lightColor * brightness, shadowSum * diff);
-    vec3 outOfSpaceColor = mix(shadowed, orgColor * lightColor * brightness, shadowSum * diff);
+    vec3 inSpaceColor = mix(shadowed, albedoColor * lightColor * lightBrightness, shadowSum * diff);
+    vec3 outOfSpaceColor = mix(shadowed, orgColor * lightColor * lightBrightness, shadowSum * diff);
 
     float lumInSpace = luminance(inSpaceColor);
     float lumOrg = luminance(orgColor);

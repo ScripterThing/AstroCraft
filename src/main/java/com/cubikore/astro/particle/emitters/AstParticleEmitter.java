@@ -1,7 +1,7 @@
 package com.cubikore.astro.particle.emitters;
 
 import com.cubikore.astro.AstroCraft;
-import com.cubikore.astro.util.VectorMath;
+import com.cubikore.astro.math.VectorMath;
 import com.cubikore.astro.particle.AstParticleManager;
 import net.minecraft.util.Identifier;
 import org.joml.Vector2f;

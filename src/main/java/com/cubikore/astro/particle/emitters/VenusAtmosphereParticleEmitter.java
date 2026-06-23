@@ -3,7 +3,7 @@ package com.cubikore.astro.particle.emitters;
 import com.cubikore.astro.AstroCraftClient;
 import com.cubikore.astro.client.ClientStorage;
 import com.cubikore.astro.game.client.AstroCraftClientGameManager;
-import com.cubikore.astro.util.VectorMath;
+import com.cubikore.astro.math.VectorMath;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;

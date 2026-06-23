@@ -1,7 +1,8 @@
 package com.cubikore.astro.particle.emitters;
 
 import com.cubikore.astro.AstroCraftClient;
-import com.cubikore.astro.util.VectorMath;
+import com.cubikore.astro.math.AstMath;
+import com.cubikore.astro.math.VectorMath;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -34,7 +35,7 @@ public class VenusAcidRainParticleEmitter extends  AstParticleEmitter{
 
         this.drag = 0.1f;
 
-        float[] nPos = calculateSpawnPos();
+        float[] nPos = calculateSpawnPos(true);
 
         x[i] = nPos[0];
         y[i] = nPos[1];
@@ -43,7 +44,7 @@ public class VenusAcidRainParticleEmitter extends  AstParticleEmitter{
 
     @Override
     public void update(float deltaTime) {
-        this.gravity = -7.2f;
+        this.gravity = -9.8f;
         for(int i = 0; i < count; i++) {
             float strength = 1f;
             float div = 10f;
@@ -65,14 +66,20 @@ public class VenusAcidRainParticleEmitter extends  AstParticleEmitter{
         super.update(deltaTime);
     }
 
-    private float[] calculateSpawnPos() {
+    private float[] calculateSpawnPos(boolean newParticle) {
         Vec3d plPos = MinecraftClient.getInstance().player.getPos();
 
         float[] playerPos = new float[]{(float) plPos.x, (float) plPos.y, (float) plPos.z};
 
-        float nx = (random.nextFloat() * 2.0f - 1.0f) * 11f;
+        float nx = (random.nextFloat() * 2.0f - 1.0f) * 10f;
         float ny = 20 + (random.nextFloat() * 30f);
-        float nz = (random.nextFloat() * 2.0f - 1.0f) * 11f;
+        float nz = (random.nextFloat() * 2.0f - 1.0f) * 10f;
+
+        float dst = VectorMath.distance(playerPos[0], playerPos[2], nx, nz);
+        float o1 = dst / 10f;
+
+        if(!newParticle)
+            ny = 20 - AstMath.lerp(0, 20, o1);
 
         float[] nPos = new float[]{playerPos[0] + nx, playerPos[1] + ny, playerPos[2] + nz};
         nPos[1] = Math.max(120, nPos[1]);
@@ -84,9 +91,9 @@ public class VenusAcidRainParticleEmitter extends  AstParticleEmitter{
     protected void despawn(int i) {
         if(!emittingStopped) {
             if (random.nextFloat() <= 0.2f)
-                AstroCraftClient.clientGameManager.particleManager.addEmitter(new VenusAcidRainSplashParticleEmitter(new Vector3f(x[i], y[i] + 0.5f, z[i]), 1, random));
+                AstroCraftClient.clientGameManager.particleManager.addEmitter(new VenusAcidRainSplashParticleEmitter(new Vector3f(x[i], y[i] + 0.5f, z[i]), 1, random, new int[]{this.r, this.g, this.b}));
 
-            float[] nPos = calculateSpawnPos();
+            float[] nPos = calculateSpawnPos(false);
 
             x[i] = nPos[0];
             y[i] = nPos[1];

@@ -5,6 +5,7 @@ import com.cubikore.astro.client.ClientStorage;
 import com.cubikore.astro.client.cutscene.CutsceneManager;
 import com.cubikore.astro.client.cutscene.FTLJumpCutscene;
 import com.cubikore.astro.client.gui.screen.ArmorCustomizationScreen;
+import com.cubikore.astro.client.input.AstroCraftKeyBinds;
 import com.cubikore.astro.client.light.PositionPointLightData;
 import com.cubikore.astro.dimension.DimensionKeys;
 import com.cubikore.astro.events.client.AstroCraftClientWeatherEvents;
@@ -32,6 +33,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.decoration.DisplayEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -123,6 +125,10 @@ public class AstroCraftClientGameManager {
         });
     }
 
+    public void openCustomizationScreen(MinecraftClient client) {
+        client.setScreen(new ArmorCustomizationScreen());
+    }
+
     private void handleWind() {
         float gameTime = getGameTime();
 
@@ -133,14 +139,16 @@ public class AstroCraftClientGameManager {
 
     private void handleFlashlight(MinecraftClient client, PlayerEntity player) {
         if(AstroCraftUtil.timePassed(lastPressed) > 0.3f) {
-            if(isKeyPressed(GLFW.GLFW_KEY_F) && client.currentScreen == null) {
+            if(AstroCraftKeyBinds.flashlightKey.wasPressed()) {
                 capturePressed();
                 ClientPlayNetworking.send(new PlayerFlashlightPayload(player.getUuid(), true));
+                PlayerComponentAccess access = (PlayerComponentAccess) player;
+                access.setFlashlightOn(!access.isFlashlightOn());
             }
 
-            if(isKeyPressed(GLFW.GLFW_KEY_G) && client.currentScreen == null) {
+            if(AstroCraftKeyBinds.customizationKey.wasPressed()) {
                 capturePressed();
-                client.setScreen(new ArmorCustomizationScreen());
+                openCustomizationScreen(client);
             }
         }
     }

@@ -1,0 +1,18 @@
+{
+  "vertex": "veil:blit_screen",
+  "fragment": "astrocraft:unlit_combine",
+  "textures": {
+    "DepthSampler": {
+      "type": "framebuffer",
+      "name": "minecraft:main:depth"
+    },
+    "UnlitSampler": {
+      "type": "framebuffer",
+      "name": "astrocraft:unlit_stencil"
+    },
+    "UnlitDepthSampler": {
+      "type": "framebuffer",
+      "name": "astrocraft:unlit_stencil:depth"
+    }
+  }
+}

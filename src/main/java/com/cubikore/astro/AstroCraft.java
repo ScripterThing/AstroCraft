@@ -3,6 +3,7 @@ package com.cubikore.astro;
 import com.cubikore.astro.block.AstroCraftBlocks;
 import com.cubikore.astro.block.entity.AstroCraftBlockEntities;
 import com.cubikore.astro.block.fluid.AstroCraftFluids;
+import com.cubikore.astro.client.input.AstroCraftKeyBinds;
 import com.cubikore.astro.command.AstroCraftCommands;
 import com.cubikore.astro.game.server.AstroCraftServerGameManager;
 import com.cubikore.astro.item.AstroCraftArmorMaterials;
@@ -29,6 +30,7 @@ public class AstroCraft implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("Hello Fabric world!");
 
+        AstroCraftKeyBinds.registerKeyBinds();
         AstroCraftArmorMaterials.registerMaterials();
         AstroCraftItems.registerItems();
         AstroCraftBlocks.registerBlocks();

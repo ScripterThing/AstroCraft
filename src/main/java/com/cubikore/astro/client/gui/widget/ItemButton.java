@@ -1,7 +1,12 @@
 package com.cubikore.astro.client.gui.widget;
 
+import com.cubikore.astro.client.gui.AstroCraftGuiTextures;
 import com.cubikore.astro.client.gui.action.ButtonAction;
+import com.cubikore.astro.util.UIUtils;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.item.ItemStack;
 
 import java.util.function.Consumer;
@@ -13,17 +18,11 @@ public class ItemButton extends AstButton{
 
     private String message;
 
-    private int backColor = 0xff000000;
-
     public ItemButton(int x, int y, ItemStack stack, String message, Consumer<ButtonAction> onPressed) {
         super(x, y, 16, 16);
         this.stack = stack;
         this.onPressed = onPressed;
         this.message = message;
-    }
-
-    public void setBackColor(int color) {
-        backColor = color;
     }
 
     public String getMessage() {
@@ -37,32 +36,38 @@ public class ItemButton extends AstButton{
     }
 
     @Override
-    protected void hovering(int mouseX, int mouseY, AstButton button) {
+    protected void hovering(int mouseX, int mouseY) {
 
     }
 
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float deltaTime) {
-        int baseX = this.x;
-        int baseY = this.y;
-        int endX = this.x + width;
-        int endY = this.y + height;
-
-        int borderSize = 1;
-
-        if(this.isHovered()) {
-            context.fill(baseX - borderSize, baseY - borderSize, endX + borderSize, endY + borderSize, 0xffffffff);
-        }
-
-        if(this.isSelected()) {
-            context.fill(baseX - borderSize, baseY - borderSize, endX + borderSize, endY + borderSize, 0xff4e88fc);
-        }
-
-        context.fill(baseX, baseY, endX, endY, backColor);
+        super.renderBackground(context, mouseX, mouseY, deltaTime);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTime) {
-        context.drawItem(stack, this.x, this.y);
+        MinecraftClient client = MinecraftClient.getInstance();
+
+        Sprite disabledSprite = UIUtils.getSprite(context, AstroCraftGuiTextures.DISABLED);
+
+        BakedModel model = client.getItemRenderer().getModel(stack, client.world, client.player, 0);
+        Sprite itemSprite = model.getParticleSprite();
+
+        float r = 1.0f;
+        float g = 1.0f;
+        float b = 1.0f;
+
+        if(isDisabled()) {
+            r = g = b = 0.5f;
+            if(showingDisabledToolTip()) {
+                context.drawTooltip(screen.getTextRenderer(), this.disabledToolTip, mouseX, mouseY);
+            }
+        }
+
+        context.drawSprite(this.x, this.y, 0, this.width, this.height, itemSprite, r, g, b, 1);
+
+        if(isDisabled())
+            context.drawSprite(this.x, this.y, 0, this.width, this.height, disabledSprite, r, g, b, 1);
     }
 }

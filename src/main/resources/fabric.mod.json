@@ -29,6 +29,7 @@
 		"astrocraft.mixins.json"
 	],
 	"depends": {
+		"fabric-key-binding-api-v1": "*",
 		"veil": ">=4.1.2",
 		"imguimc": "1.1.0+mc1.21.1",
 		"handcrafted": ">=4.0.3",

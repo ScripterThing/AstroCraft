@@ -1,4 +1,4 @@
-package com.cubikore.astro.util;
+package com.cubikore.astro.math;
 
 import org.joml.Math;
 import org.joml.Vector2f;
@@ -59,6 +59,12 @@ public class VectorMath {
         float y = ay - by;
         float z = az - bz;
         return new float[]{x, y, z};
+    }
+
+    public static float distance(float ax, float ay, float bx, float by) {
+        float xs = bx - ax;
+        float ys = by - ay;
+        return Math.sqrt(xs * xs + ys * ys);
     }
 
     public static float distance(float ax, float ay, float az, float bx, float by, float bz) {

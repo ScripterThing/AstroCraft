@@ -1,11 +1,11 @@
 package com.cubikore.astro.client.gui.screen;
 
 import com.cubikore.astro.client.ClientStorage;
-import com.cubikore.astro.gui.AstroCraftSprites;
+import com.cubikore.astro.client.gui.AstroCraftGuiTextures;
 import com.cubikore.astro.networking.payload.ShipCommandPayload;
 import com.cubikore.astro.universe.Planet;
 import com.cubikore.astro.universe.Universe;
-import com.cubikore.astro.util.VectorMath;
+import com.cubikore.astro.math.VectorMath;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -70,7 +70,7 @@ public class ControlPanelScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
 
-        context.drawGuiTexture(AstroCraftSprites.BLACK_SPRITE, (this.width / 2) - 150, (this.height / 2) - 150, 300, 300);
+        context.drawGuiTexture(AstroCraftGuiTextures.BLACK_SPRITE, (this.width / 2) - 150, (this.height / 2) - 150, 300, 300);
 
         Text aupt = Text.literal("Auto Pilot Options");
         int aw = this.textRenderer.getWidth(aupt);
@@ -88,13 +88,13 @@ public class ControlPanelScreen extends Screen {
             context.drawGuiTexture(planetId, (int) (orbitPos.x - 8), (int) (orbitPos.y - 8), 16, 16);
 
             if(mouseX >= orbitPos.x - 10 && mouseY >= orbitPos.y - 10 && mouseX <= orbitPos.x + 10 && mouseY <= orbitPos.y + 10) {
-                context.drawGuiTexture(AstroCraftSprites.PLANET_SELECT_SPRITE, (int) (orbitPos.x - 10), (int) (orbitPos.y - 10), 20, 20);
+                context.drawGuiTexture(AstroCraftGuiTextures.PLANET_SELECT_SPRITE, (int) (orbitPos.x - 10), (int) (orbitPos.y - 10), 20, 20);
 
                 context.drawTooltip(this.textRenderer, Text.translatable(planetId.toTranslationKey()), mouseX, mouseY);
             }
         }
 
-        context.drawGuiTexture(AstroCraftSprites.SUN_SPRITE, (this.width / 2) - 16, (this.height / 2) - 16, 32, 32);
+        context.drawGuiTexture(AstroCraftGuiTextures.SUN_SPRITE, (this.width / 2) - 16, (this.height / 2) - 16, 32, 32);
     }
 
     @Override

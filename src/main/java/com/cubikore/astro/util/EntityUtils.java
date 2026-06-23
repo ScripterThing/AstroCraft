@@ -7,6 +7,7 @@ import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 
 public class EntityUtils {
     public static EquipmentSlot getSlotByName(String name) {
@@ -24,6 +25,14 @@ public class EntityUtils {
                 && entity.getEquippedStack(EquipmentSlot.CHEST).isOf(AstroCraftItems.SPACE_SUIT_CHESTPLATE)
                 && entity.getEquippedStack(EquipmentSlot.LEGS).isOf(AstroCraftItems.SPACE_SUIT_LEGGINGS)
                 && entity.getEquippedStack(EquipmentSlot.FEET).isOf(AstroCraftItems.SPACE_SUIT_BOOTS);
+    }
+
+    public static boolean wearingSpaceSuit(LivingEntity entity, EquipmentSlot slot) {
+        ItemStack stack = entity.getEquippedStack(slot);
+        return stack.isOf(AstroCraftItems.SPACE_SUIT_HELMET)
+                || stack.isOf(AstroCraftItems.SPACE_SUIT_CHESTPLATE)
+                || stack.isOf(AstroCraftItems.SPACE_SUIT_LEGGINGS)
+                || stack.isOf(AstroCraftItems.SPACE_SUIT_BOOTS);
     }
 
     public static void hidePlayerPartsWithSuit(PlayerEntityModel<AbstractClientPlayerEntity> playerModel, PlayerEntity player) {

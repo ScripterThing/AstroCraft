@@ -1,13 +1,9 @@
-package com.cubikore.astro.gui;
+package com.cubikore.astro.client.gui;
 
 import com.cubikore.astro.AstroCraft;
-import com.cubikore.astro.universe.Universe;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
-import java.util.HashMap;
-
-public class AstroCraftSprites {
+public class AstroCraftGuiTextures {
     public static Identifier EARTH_SPRITE = Identifier.of(AstroCraft.MOD_ID, "earth");
     public static Identifier VENUS_SPRITE = Identifier.of(AstroCraft.MOD_ID, "venus");
     public static Identifier MERCURY_SPRITE = Identifier.of(AstroCraft.MOD_ID, "mercury");
@@ -25,4 +21,5 @@ public class AstroCraftSprites {
     public static Identifier URANUS_RING_SPRITE = Identifier.of(AstroCraft.MOD_ID, "uranus_ring");
 
     public static Identifier BLACK_SPRITE = Identifier.of(AstroCraft.MOD_ID, "black");
+    public static Identifier DISABLED = Identifier.of(AstroCraft.MOD_ID, "disabled");
 }

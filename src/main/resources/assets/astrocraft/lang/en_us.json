@@ -15,9 +15,43 @@
   "astrocraft.neptune": "Neptune",
 
   "item.astrocraft.space_suit_helmet": "Spacesuit Helmet",
-  "item.astrocraft.space_suit_chestplate": "Spacesuit Chestplate",
-  "item.astrocraft.space_suit_leggings": "Spacesuit Leggings",
+  "item.astrocraft.space_suit_chestplate": "Spacesuit Torso",
+  "item.astrocraft.space_suit_leggings": "Spacesuit Legs",
   "item.astrocraft.space_suit_boots": "Spacesuit Boots",
 
-  "item.astrocraft.color.info": "%1$s"
+  "category.astrocraft.keys": "Astro Craft",
+  "key.astrocraft.customization_screen": "Suit Customization",
+  "key.astrocraft.flashlight": "Flashlight",
+
+  "item.astrocraft.color.info": "%1$s",
+
+  "color.astrocraft.black": "Black",
+  "color.astrocraft.dark_gray": "Dark Gray",
+  "color.astrocraft.gray": "Gray",
+  "color.astrocraft.white": "White",
+
+  "color.astrocraft.dark_blue": "Dark Blue",
+  "color.astrocraft.blue": "Blue",
+  "color.astrocraft.dark_aqua": "Dark Cyan",
+  "color.astrocraft.aqua": "Cyan",
+
+  "color.astrocraft.dark_green": "Dark Green",
+  "color.astrocraft.green": "Green",
+  "color.astrocraft.gold": "Gold",
+  "color.astrocraft.yellow": "Yellow",
+
+  "color.astrocraft.dark_red": "Dark Red",
+  "color.astrocraft.red": "Red",
+  "color.astrocraft.dark_purple": "Magenta",
+  "color.astrocraft.light_purple": "Pink",
+
+  "text.astrocraft.armor_selection.head": "Helmet",
+  "text.astrocraft.armor_selection.chest": "Torso",
+  "text.astrocraft.armor_selection.legs": "Legs",
+  "text.astrocraft.armor_selection.feet": "Boots",
+
+  "text.astrocraft.armor_selection.disabled.head": "Equip Suit Helmet",
+  "text.astrocraft.armor_selection.disabled.chest": "Equip Suit Torso",
+  "text.astrocraft.armor_selection.disabled.legs": "Equip Suit Legs",
+  "text.astrocraft.armor_selection.disabled.feet": "Equip Suit Boots"
 }

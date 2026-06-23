@@ -22,6 +22,7 @@
   },
   "client": [
     "CameraAccessor",
+    "DrawContextAccessor",
     "PlayerEntityMixin",
     "PlayerEntityModelAccessor",
     "PlayerEntityRendererAccessor",

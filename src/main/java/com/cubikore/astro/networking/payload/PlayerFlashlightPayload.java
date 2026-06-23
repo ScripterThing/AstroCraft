@@ -45,10 +45,11 @@ public record PlayerFlashlightPayload(UUID playerUuid, boolean val) implements C
         boolean bl = access.isFlashlightOn();
 
         if(player.getEquippedStack(EquipmentSlot.HEAD).isOf(AstroCraftItems.SPACE_SUIT_HELMET)) {
-            access.setFlashlightOn(!access.isFlashlightOn());
+            access.setFlashlightOn(!bl);
 
             for(ServerPlayerEntity serverPlayer : PlayerLookup.all(context.server())) {
-                ServerPlayNetworking.send(serverPlayer, new PlayerFlashlightPayload(player.getUuid(), access.isFlashlightOn()));
+                if(!serverPlayer.getUuid().equals(player.getUuid()))
+                    ServerPlayNetworking.send(serverPlayer, new PlayerFlashlightPayload(player.getUuid(), access.isFlashlightOn()));
             }
         }
     }

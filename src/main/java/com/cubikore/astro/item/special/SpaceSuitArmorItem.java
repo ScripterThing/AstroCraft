@@ -38,7 +38,7 @@ public class SpaceSuitArmorItem extends ArmorItem implements GeoItem {
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         String color = stack.get(AstComponents.SUIT_COLOR_COMPONENT);
-        tooltip.add(Text.translatable("item.astrocraft.color.info", color).formatted(Formatting.byName(color), Formatting.BOLD));
+        tooltip.add(Text.translatable("color.astrocraft." + color).formatted(Formatting.byName(color), Formatting.BOLD));
         super.appendTooltip(stack, context, tooltip, type);
     }
 

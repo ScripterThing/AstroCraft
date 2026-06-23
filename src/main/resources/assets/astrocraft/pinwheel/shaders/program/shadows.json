@@ -46,10 +46,13 @@
       "type": "framebuffer",
       "name": "astrocraft:particle_stencil:depth"
     },
+    "UnlitDepthSampler": {
+      "type": "framebuffer",
+      "name": "astrocraft:unlit_stencil:depth"
+    },
     "NoiseTex": {
       "type": "location",
       "location": "astrocraft:textures/shader/rnoise.png"
     }
-
   }
 }

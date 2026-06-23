@@ -1,6 +1,6 @@
 package com.cubikore.astro.particle.emitters;
 
-import com.cubikore.astro.util.VectorMath;
+import com.cubikore.astro.math.VectorMath;
 import com.cubikore.astro.sound.AstroCraftSounds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -14,12 +14,12 @@ import org.joml.Vector3f;
 public class VenusAcidRainSplashParticleEmitter extends AstParticleEmitter{
     private Random random;
 
-    public VenusAcidRainSplashParticleEmitter(Vector3f position, int count, Random random) {
+    public VenusAcidRainSplashParticleEmitter(Vector3f position, int count, Random random, int[] color) {
         super(position, new Vector2f(0.25f), count, 3f, null);
 
-        this.r = 230;
-        this.g = 247;
-        this.b = 74;
+        this.r = color[0];
+        this.g = color[1];
+        this.b = color[2];
 
         this.random = random;
 
