@@ -23,6 +23,7 @@
   "client": [
     "CameraAccessor",
     "DrawContextAccessor",
+    "InGameHudMixin",
     "PlayerEntityMixin",
     "PlayerEntityModelAccessor",
     "PlayerEntityRendererAccessor",

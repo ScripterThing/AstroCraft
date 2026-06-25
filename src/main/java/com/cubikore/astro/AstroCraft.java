@@ -14,6 +14,7 @@ import com.cubikore.astro.world.worldgen.AstroCraftChunkGenerators;
 import com.google.gson.Gson;
 import net.fabricmc.api.ModInitializer;
 
+import net.minecraft.client.render.RenderLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

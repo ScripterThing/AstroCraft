@@ -22,6 +22,7 @@ import foundry.veil.api.client.render.light.renderer.LightRenderHandle;
 import foundry.veil.api.client.render.post.PostProcessingManager;
 import foundry.veil.api.client.render.shader.program.ShaderProgram;
 import foundry.veil.platform.VeilEventPlatform;
+import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.util.Identifier;
@@ -102,7 +103,10 @@ public class AstroCraftPostProcessingManager {
                         planetFogShader.getUniformSafe("shouldRender").setInt(weather.currentAtmosphereConditions.hasFog ? 1 : 0);
 
                         planetFogShader.getUniformSafe("lightDarkFactor").setFloat(weather.currentAtmosphereConditions.lightDarkFactor);
-                        planetFogShader.getUniformSafe("fogFactor").setFloat(weather.currentAtmosphereConditions.fogDistance);
+
+                        float fogDistance = weather.currentAtmosphereConditions.fogDistance;
+
+                        planetFogShader.getUniformSafe("fogFactor").setFloat(camera.getSubmersionType().equals(CameraSubmersionType.WATER) ? fogDistance / 3.0f : fogDistance);
 
                         planetFogShader.getUniformSafe("fogColor").setVector(weather.currentAtmosphereConditions.fogColor);
                         planetFogShader.getUniformSafe("fogDarkColor").setVector(weather.currentAtmosphereConditions.fogDarkColor);

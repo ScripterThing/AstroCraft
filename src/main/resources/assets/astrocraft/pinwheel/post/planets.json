@@ -10,18 +10,18 @@
       "type": "veil:blit",
       "shader": "astrocraft:planets",
       "in": "post_stars",
-      "out": "astrocraft:planet_buffer"
-    },
-    {
-      "type": "veil:blit",
-      "shader": "astrocraft:atmosphere",
-      "in": "astrocraft:planet_buffer",
       "out": "post_planet"
     },
     {
       "type": "veil:blit",
-      "shader": "astrocraft:fxaa",
+      "shader": "astrocraft:atmosphere",
       "in": "post_planet",
+      "out": "post_atmosphere"
+    },
+    {
+      "type": "veil:blit",
+      "shader": "astrocraft:fxaa",
+      "in": "post_atmosphere",
       "out": "veil:post"
     }
   ],
@@ -33,6 +33,12 @@
       "linear": true
     },
     "post_planet": {
+      "depth": true,
+      "format": "RGBA32F",
+      "autoClear": false,
+      "linear": true
+    },
+    "post_atmosphere": {
       "depth": true,
       "format": "RGBA8",
       "autoClear": false,

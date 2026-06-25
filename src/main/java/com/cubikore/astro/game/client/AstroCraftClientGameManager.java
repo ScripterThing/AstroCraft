@@ -10,7 +10,6 @@ import com.cubikore.astro.client.light.PositionPointLightData;
 import com.cubikore.astro.dimension.DimensionKeys;
 import com.cubikore.astro.events.client.AstroCraftClientWeatherEvents;
 import com.cubikore.astro.math.AstMath;
-import com.cubikore.astro.networking.payload.FTLJumpPayload;
 import com.cubikore.astro.networking.payload.PlayerFlashlightPayload;
 import com.cubikore.astro.networking.payload.ShipMovingPayload;
 import com.cubikore.astro.particle.AstParticleManager;
@@ -31,9 +30,11 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.decoration.DisplayEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -62,6 +63,8 @@ public class AstroCraftClientGameManager {
     public VenusHighWindSoundInstance venusHighWindSoundInstance;
 
     private long lastPressed = System.currentTimeMillis();
+
+    private boolean ran = false;
 
     public void init() {
         weatherManager.add(Universe.SPACE_ID, new ClientWeather("space"));
@@ -122,6 +125,18 @@ public class AstroCraftClientGameManager {
 
                 cutsceneManager.tick(client);
             }
+
+            boolean essentialsLoaded = FabricLoader.getInstance().isModLoaded("essential-container");
+
+            if(essentialsLoaded && !ran) {
+                for(KeyBinding binding : client.options.allKeys) {
+                    String name = binding.getTranslationKey();
+                    if(name.equals("key.swapOffhand") || name.equals("keybind.name.MENU_ACCESS") || name.equals("keybind.name.ZOOM")) {
+                        binding.setBoundKey(InputUtil.UNKNOWN_KEY);
+                    }
+                }
+                ran = true;
+            }
         });
     }
 
@@ -139,14 +154,14 @@ public class AstroCraftClientGameManager {
 
     private void handleFlashlight(MinecraftClient client, PlayerEntity player) {
         if(AstroCraftUtil.timePassed(lastPressed) > 0.3f) {
-            if(AstroCraftKeyBinds.flashlightKey.wasPressed()) {
+            if(AstroCraftKeyBinds.FLASHLIGHT_KEY.wasPressed()) {
                 capturePressed();
                 ClientPlayNetworking.send(new PlayerFlashlightPayload(player.getUuid(), true));
                 PlayerComponentAccess access = (PlayerComponentAccess) player;
                 access.setFlashlightOn(!access.isFlashlightOn());
             }
 
-            if(AstroCraftKeyBinds.customizationKey.wasPressed()) {
+            if(AstroCraftKeyBinds.CUSTOMIZATION_KEY.wasPressed()) {
                 capturePressed();
                 openCustomizationScreen(client);
             }

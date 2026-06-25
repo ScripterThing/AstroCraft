@@ -1,5 +1,6 @@
 package com.cubikore.astro.datagen;
 
+import com.cubikore.astro.block.AstroCraftBlocks;
 import com.cubikore.astro.item.AstroCraftItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
@@ -14,7 +15,7 @@ public class AstroCraftModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator generator) {
-
+        //generator.registerSimpleCubeAll(AstroCraftBlocks.PLANKS);
     }
 
     @Override

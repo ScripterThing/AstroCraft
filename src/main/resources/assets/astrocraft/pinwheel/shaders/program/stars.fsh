@@ -241,7 +241,7 @@ vec3 stars(int seed,vec3 dir, float starSpacing,float lightThreshold) {
     float phaseOffset = starHash.y;
     strength = strength - 0.5 * strength * phaseOffset;
     float starProximity = dot(dir,normalize(closestStar));
-    float star = smoothstep(13,14.,-log(1.-starProximity));
+    float star = smoothstep(13.0,14.,-log(1.-starProximity));
     vec3 result = vec3(star * strength);
     return result * smoothstep(vec3(lightThreshold/2.),vec3(lightThreshold),result);
 }

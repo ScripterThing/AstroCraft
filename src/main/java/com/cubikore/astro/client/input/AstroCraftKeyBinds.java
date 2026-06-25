@@ -7,8 +7,8 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
 public class AstroCraftKeyBinds {
-    public static KeyBinding customizationKey = register("customization_screen", GLFW.GLFW_KEY_G);
-    public static KeyBinding flashlightKey = register("flashlight", GLFW.GLFW_KEY_R);
+    public static KeyBinding CUSTOMIZATION_KEY = register("customization_screen", GLFW.GLFW_KEY_G);
+    public static KeyBinding FLASHLIGHT_KEY = register("flashlight", GLFW.GLFW_KEY_F);
 
     private static KeyBinding register(String name, int key) {
         return KeyBindingHelper.registerKeyBinding(new KeyBinding(
