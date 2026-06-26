@@ -58,25 +58,25 @@ public class FTLJumpCutscene extends AstCutscene{
                 if(firstAngle && !secondAngle) {
                     float tp = getDelta(firstAngleStart);
                     float fraction = tp / 2.0f;
-                    ClientStorage.terrainOffset[0] = AstMath.lerpExp(0, 300, 50, fraction);
+                    ClientStorage.terrainOffset[0] = AstMath.lerpExp(0, -300, 50, fraction);
                 }
                 else if(secondAngle) {
                     float tp = getDelta(secondAngleStart);
                     float fraction = calculateArrivingEasing(Math.min(tp / 2.0f, 1.0f));
-                    ClientStorage.terrainOffset[0] = AstMath.lerp(-2000, 0, fraction);
+                    ClientStorage.terrainOffset[0] = AstMath.lerp(2000, 0, fraction);
                 }
 
                 if(!firstAngle) {
                     firstAngle = true;
                     firstAngleStart = System.currentTimeMillis();
 
-                    cameraEntity.refreshPositionAndAngles(115, 68, -73, 30.6f, 41.3f);
+                    cameraEntity.refreshPositionAndAngles(115, 222, -73, 30.6f, 41.3f);
                 }
                 else if(!secondAngle && sceneTime >= 3f) {
                     secondAngle = true;
                     secondAngleStart = System.currentTimeMillis();
 
-                    cameraEntity.refreshPositionAndAngles(134, 16, 80, 142.2f, 15f);
+                    cameraEntity.refreshPositionAndAngles(134, 201, 80, 142.2f, 15f);
 
                     ClientStorage.renderedWorldOffset.set(ClientStorage.FTLJumpDestination);
                     AstroCraftClient.clientGameManager.prevWorldOffset.set(ClientStorage.renderedWorldOffset);

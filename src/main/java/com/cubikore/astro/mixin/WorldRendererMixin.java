@@ -68,9 +68,9 @@ public class WorldRendererMixin {
         double f = MathHelper.lerp((double)tickDelta, entity.lastRenderZ, entity.getZ());
         float g = MathHelper.lerp(tickDelta, entity.prevYaw, entity.getYaw());
 
-        cameraX -= ClientStorage.terrainOffset[0];
-        cameraY -= ClientStorage.terrainOffset[1];
-        cameraZ -= ClientStorage.terrainOffset[2];
+        cameraX += ClientStorage.terrainOffset[0];
+        cameraY += ClientStorage.terrainOffset[1];
+        cameraZ += ClientStorage.terrainOffset[2];
 
         this.entityRenderDispatcher
                 .render(entity, d - cameraX, e - cameraY, f - cameraZ, g, tickDelta, matrices, vertexConsumers, this.entityRenderDispatcher.getLight(entity, tickDelta));
@@ -79,9 +79,9 @@ public class WorldRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "renderLayer", cancellable = true)
     private void offset(RenderLayer renderLayer, double x, double y, double z, Matrix4f matrix4f, Matrix4f positionMatrix, CallbackInfo ci) {
-        x -= ClientStorage.terrainOffset[0];
-        y -= ClientStorage.terrainOffset[1];
-        z -= ClientStorage.terrainOffset[2];
+        x += ClientStorage.terrainOffset[0];
+        y += ClientStorage.terrainOffset[1];
+        z += ClientStorage.terrainOffset[2];
 
         if(client.player != null && client.options.getPerspective().isFirstPerson()) {
             PlayerComponentAccess access = (PlayerComponentAccess) client.player;

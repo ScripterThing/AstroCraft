@@ -8,6 +8,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.EquipmentSlot;
@@ -79,11 +80,13 @@ public class AstroCraftHudRenderer {
     private void renderHelmetHud(DrawContext context, RenderTickCounter counter, MinecraftClient client) {
         renderVignetteOverlay(context, client);
 
-        Text flashlightKey = AstroCraftKeyBinds.FLASHLIGHT_KEY.getBoundKeyLocalizedText();
-        Text flashlightText = Text.translatable("text.astrocraft.flashlight");
+        if(!(client.currentScreen instanceof ChatScreen)) {
+            Text flashlightKey = AstroCraftKeyBinds.FLASHLIGHT_KEY.getBoundKeyLocalizedText();
+            Text flashlightText = Text.translatable("text.astrocraft.flashlight");
 
-        String flashlightTipText = flashlightText.getString() + " (" + flashlightKey.getString() + ")";
+            String flashlightTipText = flashlightText.getString() + " (" + flashlightKey.getString() + ")";
 
-        context.drawText(this.textRenderer, flashlightTipText, 4, this.screenHeight - 10, 0xffffffff, true);
+            context.drawText(this.textRenderer, flashlightTipText, 4, this.screenHeight - 10, 0xffffffff, true);
+        }
     }
 }

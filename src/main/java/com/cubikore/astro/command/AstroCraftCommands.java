@@ -54,7 +54,7 @@ public class AstroCraftCommands {
                                                                         int duration = IntegerArgumentType.getInteger(context, "duration_ticks");
                                                                         float intensity = FloatArgumentType.getFloat(context, "intensity");
 
-                                                                        AstroCraft.serverGameManager.weatherManager.setWeather(planetId, new PlanetWeather(type, duration, intensity));
+                                                                        AstroCraft.gameManager.weatherManager.setWeather(planetId, new PlanetWeather(type, duration, intensity));
 
                                                                         String feedbackString = "Set weather of " + planetId.toString() + " to " + type + " for " + duration + " ticks with intensity of " + intensity;
 
@@ -70,19 +70,18 @@ public class AstroCraftCommands {
 
                     dispatcher.register(
                             CommandManager.literal("executeFTLJump")
-                                    .then(CommandManager.argument("target", StringArgumentType.word())
+                                    .then(CommandManager.argument("target", IdentifierArgumentType.identifier())
                                             .suggests(((context, builder) -> {
-                                                for(Planet planet : Universe.planets) {
-                                                    if(!planet.planetId.equals(Universe.SUN_ID))
-                                                        builder.suggest(planet.planetId.toString());
+                                                List<Identifier> ids = new ArrayList<>();
+                                                for (String planet : AstroCraftClient.clientGameManager.weatherManager.supportedPlanets) {
+                                                    ids.add(Identifier.tryParse(planet));
                                                 }
-
-                                                return builder.buildFuture();
+                                                return CommandSource.suggestIdentifiers(ids, builder);
                                             }))
                                             .executes(context -> {
-                                                String targetPlanetId = StringArgumentType.getString(context, "target");
+                                                Identifier targetPlanetId = IdentifierArgumentType.getIdentifier(context, "target");
 
-                                                Planet targetPlanet = Universe.getPlanet(Identifier.tryParse(targetPlanetId));
+                                                Planet targetPlanet = Universe.getPlanet(targetPlanetId);
                                                 Planet sun = Universe.getPlanet(Universe.SUN_ID);
 
                                                 if(targetPlanet != null && sun != null) {

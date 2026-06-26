@@ -11,8 +11,29 @@
   "astrocraft.earth": "Earth",
   "astrocraft.mars": "Mars",
   "astrocraft.jupiter": "Jupiter",
+  "astrocraft.saturn": "Saturn",
   "astrocraft.uranus": "Uranus",
   "astrocraft.neptune": "Neptune",
+
+  "astrocraft.attribute.rocky": "Rocky",
+  "astrocraft.attribute.gas_giant": "Gas Giant",
+  "astrocraft.attribute.ice_giant": "Ice Giant",
+  "astrocraft.attribute.life": "Life-bearing",
+  "astrocraft.attribute.temperate": "Temperate",
+  "astrocraft.attribute.arid": "Arid",
+  "astrocraft.attribute.breathable": "Breathable",
+  "astrocraft.attribute.airless": "Airless",
+  "astrocraft.attribute.storm_heavy": "Storm-heavy",
+  "astrocraft.attribute.giant_storms": "Giant Storms",
+  "astrocraft.attribute.extreme_heat": "Extreme Heat",
+  "astrocraft.attribute.extreme_cold": "Extreme Cold",
+  "astrocraft.attribute.temp_swing": "Temperature Swings",
+  "astrocraft.attribute.low_grav": "Low Gravity",
+  "astrocraft.attribute.high_grav": "High Gravity",
+  "astrocraft.attribute.toxic_atmosphere": "Toxic Atmosphere",
+  "astrocraft.attribute.dense_atmosphere": "Dense Atmosphere",
+  "astrocraft.attribute.thin_atmosphere": "Thin Atmosphere",
+  "astrocraft.attribute.rings": "Ringed",
 
   "item.astrocraft.space_suit_helmet": "Spacesuit Helmet",
   "item.astrocraft.space_suit_chestplate": "Spacesuit Torso",
@@ -55,5 +76,9 @@
   "text.astrocraft.armor_selection.disabled.head": "Equip Suit Helmet",
   "text.astrocraft.armor_selection.disabled.chest": "Equip Suit Torso",
   "text.astrocraft.armor_selection.disabled.legs": "Equip Suit Legs",
-  "text.astrocraft.armor_selection.disabled.feet": "Equip Suit Boots"
+  "text.astrocraft.armor_selection.disabled.feet": "Equip Suit Boots",
+
+  "text.astrocraft.ftl_action": "Execute FTL",
+  "text.astrocraft.auto_thrust_action": "Auto Thrust",
+  "text.astrocraft.auto_pilot": "Auto Pilot"
 }

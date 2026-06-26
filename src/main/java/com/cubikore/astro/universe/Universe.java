@@ -45,6 +45,11 @@ public class Universe {
         }
     }
 
+    public static void addPlanets(Planet... planets) {
+        for(Planet planet : planets)
+            addPlanet(planet);
+    }
+
     public static Planet getPlanet(Identifier id) {
         for(Planet planet : planets) {
             if(planet.planetId.equals(id))

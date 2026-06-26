@@ -21,11 +21,12 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-public class AstroCraftServerGameManager {
+public class AstroCraftGameManager {
     public WeatherManager weatherManager = new WeatherManager();
 
     public void init() {
@@ -56,15 +57,71 @@ public class AstroCraftServerGameManager {
     }
 
     private void initializePlanets() {
-        Universe.addPlanet(new Planet(new Vector3f(-1030, 0, 0), 1000.0f, new Vector3f(1.0f), new Atmosphere(1.0f, 4f), Universe.EARTH_ID));
-        Universe.addPlanet(new Planet(new Vector3f(200000, 0, 0), 3000f, new Vector3f(1.0f, 0.944f, 0.852f), new Atmosphere(54649.0f, 3.19f), Universe.SUN_ID));
-        Universe.addPlanet(new Planet(new Vector3f(93933, 0, 106066), 1000f, new Vector3f(1.0f), new Atmosphere(0, 3.19f), Universe.MERCURY_ID));
-        Universe.addPlanet(new Planet(new Vector3f(30855, 0, -61563), 950f, new Vector3f(1.0f), new Atmosphere(0.5f, 3.19f, new Vector3f(483, 530, 669)), Universe.VENUS_ID));
-        Universe.addPlanet(new Planet(new Vector3f(-75000, 0, -216506), 950f, new Vector3f(1.0f), new Atmosphere(0.5f, 3.19f, new Vector3f(546, 649, 643)), Universe.MARS_ID));
-        Universe.addPlanet(new Planet(new Vector3f(892820, 0, -400000), 10973f, new Vector3f(1.0f), new Atmosphere(0.3f, 3.19f, new Vector3f(700, 700, 642)), Universe.JUPITER_ID));
-        Universe.addPlanet(new Planet(new Vector3f(2337171, -10000, 923454), 9140f, new Vector3f(1.0f), new Atmosphere(0.3f, 4.0f, new Vector3f(700, 612, 554)), Universe.SATURN_ID));
-        Universe.addPlanet(new Planet(new Vector3f(2361192, 100000, 786646), 3865f, new Vector3f(1.0f), new Atmosphere(0.3f, 3.19f, new Vector3f(678, 700, 471)), Universe.URANUS_ID));
-        Universe.addPlanet(new Planet(new Vector3f(2278461, -300000, -1200000), 3865f, new Vector3f(1.0f), new Atmosphere(0.3f, 3.19f, new Vector3f(700, 554, 408)), Universe.NEPTUNE_ID));
+        Planet earth = new Planet(new Vector3f(-1030, 0, 0), 1000.0f, new Vector3f(1.0f), new Atmosphere(1.0f, 4f), Universe.EARTH_ID);
+        earth.addAttributes(
+                Text.translatable("astrocraft.attribute.rocky"),
+                Text.translatable("astrocraft.attribute.life"),
+                Text.translatable("astrocraft.attribute.temperate"),
+                Text.translatable("astrocraft.attribute.breathable")
+        );
+
+        Planet sun = new Planet(new Vector3f(200000, 0, 0), 3000f, new Vector3f(1.0f, 0.944f, 0.852f), new Atmosphere(54649.0f, 3.19f), Universe.SUN_ID);
+
+        Planet mercury = new Planet(new Vector3f(93933, 0, 106066), 1000f, new Vector3f(1.0f), new Atmosphere(0, 3.19f), Universe.MERCURY_ID);
+        mercury.addAttributes(
+                Text.translatable("astrocraft.attribute.rocky"),
+                Text.translatable("astrocraft.attribute.airless"),
+                Text.translatable("astrocraft.attribute.extreme_heat"),
+                Text.translatable("astrocraft.attribute.low_grav")
+        );
+
+        Planet venus = new Planet(new Vector3f(30855, 0, -61563), 950f, new Vector3f(1.0f), new Atmosphere(0.5f, 3.19f, new Vector3f(483, 530, 669)), Universe.VENUS_ID);
+        venus.addAttributes(
+                Text.translatable("astrocraft.attribute.rocky"),
+                Text.translatable("astrocraft.attribute.toxic_atmosphere"),
+                Text.translatable("astrocraft.attribute.dense_atmosphere"),
+                Text.translatable("astrocraft.attribute.extreme_heat")
+        );
+
+        Planet mars = new Planet(new Vector3f(-75000, 0, -216506), 950f, new Vector3f(1.0f), new Atmosphere(0.5f, 3.19f, new Vector3f(546, 649, 643)), Universe.MARS_ID);
+        mars.addAttributes(
+                Text.translatable("astrocraft.attribute.rocky"),
+                Text.translatable("astrocraft.attribute.temp_swing"),
+                Text.translatable("astrocraft.attribute.thin_atmosphere"),
+                Text.translatable("astrocraft.attribute.low_grav")
+        );
+
+        Planet jupiter = new Planet(new Vector3f(892820, 0, -400000), 10973f, new Vector3f(1.0f), new Atmosphere(0.3f, 3.19f, new Vector3f(700, 700, 642)), Universe.JUPITER_ID);
+        jupiter.addAttributes(
+                Text.translatable("astrocraft.attribute.gas_giant"),
+                Text.translatable("astrocraft.attribute.giant_storms"),
+                Text.translatable("astrocraft.attribute.high_grav")
+        );
+
+        Planet saturn = new Planet(new Vector3f(2337171, -10000, 923454), 9140f, new Vector3f(1.0f), new Atmosphere(0.3f, 4.0f, new Vector3f(700, 612, 554)), Universe.SATURN_ID);
+        saturn.addAttributes(
+                Text.translatable("astrocraft.attribute.gas_giant"),
+                Text.translatable("astrocraft.attribute.rings"),
+                Text.translatable("astrocraft.attribute.high_grav")
+        );
+
+        Planet uranus = new Planet(new Vector3f(2361192, 100000, 786646), 3865f, new Vector3f(1.0f), new Atmosphere(0.3f, 3.19f, new Vector3f(678, 700, 471)), Universe.URANUS_ID);
+        uranus.addAttributes(
+                Text.translatable("astrocraft.attribute.ice_giant"),
+                Text.translatable("astrocraft.attribute.extreme_cold"),
+                Text.translatable("astrocraft.attribute.rings"),
+                Text.translatable("astrocraft.attribute.high_grav")
+        );
+
+        Planet neptune = new Planet(new Vector3f(2278461, -300000, -1200000), 3865f, new Vector3f(1.0f), new Atmosphere(0.3f, 3.19f, new Vector3f(700, 554, 408)), Universe.NEPTUNE_ID);
+        neptune.addAttributes(
+                Text.translatable("astrocraft.attribute.ice_giant"),
+                Text.translatable("astrocraft.attribute.extreme_cold"),
+                Text.translatable("astrocraft.attribute.storm_heavy"),
+                Text.translatable("astrocraft.attribute.high_grav")
+        );
+
+        Universe.addPlanets(earth, sun, mercury, venus, mars, jupiter, saturn, uranus, neptune);
 
         weatherManager.add(Universe.EARTH_ID, PlanetWeather.getClear());
         weatherManager.add(Universe.MERCURY_ID, PlanetWeather.getClear());

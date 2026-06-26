@@ -3,13 +3,10 @@ package com.cubikore.astro.client.gui.widget;
 import com.cubikore.astro.client.gui.screen.AstManagedScreen;
 import com.cubikore.astro.util.UIUtils;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.joml.Vector2i;
-
-import java.util.function.Consumer;
 
 public abstract class AstButton {
     protected int x, y;
@@ -24,7 +21,7 @@ public abstract class AstButton {
     protected AstManagedScreen screen;
 
     protected int backColor = 0x00000000;
-    protected int deselectedBackColor = 0x00000000;
+    protected int deselectedBorderColor = 0x00000000;
     protected int selectedColor = 0xff4e88fc;
     protected int hoverColor = 0xffffffff;
     protected int disabledColor = 0x47000000;
@@ -33,6 +30,11 @@ public abstract class AstButton {
 
     protected Text disabledToolTip = Text.empty();
     private boolean showDisabledToolTip = false;
+
+    public boolean allowRendering = true;
+
+    private boolean allow = false;
+    private int tick = 0;
 
     public AstButton(int x, int y, int width, int height) {
         this.x = x;
@@ -57,7 +59,7 @@ public abstract class AstButton {
         int endY = this.y + height;
 
         if(!isSelected() && !isDisabled()) {
-            renderBorder(context, borderSize, deselectedBackColor);
+            renderBorder(context, borderSize, deselectedBorderColor);
         }
 
         if(this.isHovered() && !isDisabled()) {
@@ -66,6 +68,14 @@ public abstract class AstButton {
 
         if(this.isSelected() && !isDisabled()) {
             renderBorder(context, borderSize, selectedColor);
+        }
+
+        if(!allow) {
+            if(tick >= 2) {
+                allow = true;
+            }
+
+            tick++;
         }
 
         context.fill(baseX, baseY, endX, endY, backColor);
@@ -100,8 +110,10 @@ public abstract class AstButton {
     }
 
     public void handlePress(int mouseX, int mouseY) {
-        if(isHovering(mouseX, mouseY) && !isDisabled())
+        if(isHovering(mouseX, mouseY) && !isDisabled() && allow) {
             this.onPressed(mouseX, mouseY);
+            allow = false;
+        }
     }
 
     public void setBackColor(int color) {
@@ -110,8 +122,8 @@ public abstract class AstButton {
     public void setSelectedColor(int color) {
         selectedColor = color;
     }
-    public void setDeselectedBackColor(int color) {
-        deselectedBackColor = color;
+    public void setDeselectedBorderColor(int color) {
+        deselectedBorderColor = color;
     }
 
     public void setHoverColor(int hoverColor) {
@@ -161,5 +173,31 @@ public abstract class AstButton {
 
     private boolean isHovering(int mouseX, int mouseY) {
         return mouseX >= this.x && mouseY >= this.y && mouseX <= this.x + this.width && mouseY <= this.y + this.height;
+    }
+
+    public void setDimensions(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

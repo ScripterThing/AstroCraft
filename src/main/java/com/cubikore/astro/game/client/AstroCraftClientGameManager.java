@@ -257,7 +257,7 @@ public class AstroCraftClientGameManager {
                 PositionPointLightData light = lightHandle.getLightData();
 
                 Vector3d offseted = new Vector3d(0);
-                light.getTruePosition().add(ClientStorage.terrainOffset[0], ClientStorage.terrainOffset[1], ClientStorage.terrainOffset[2], offseted);
+                light.getTruePosition().sub(ClientStorage.terrainOffset[0], ClientStorage.terrainOffset[1], ClientStorage.terrainOffset[2], offseted);
                 light.setPosition(offseted.x, offseted.y, offseted.z);
             }
         }
@@ -296,7 +296,7 @@ public class AstroCraftClientGameManager {
                 float OI = (distanceFromSun - 8000f) / 500000f;
                 OI = Math.clamp(1f - OI, 0.1f, 1.0f);
 
-                ClientStorage.sunBrightness[0] = OI * 5f;
+                ClientStorage.sunBrightness[0] = OI * 6f;
             }
         }
     }

@@ -5,7 +5,7 @@ import com.cubikore.astro.block.entity.AstroCraftBlockEntities;
 import com.cubikore.astro.block.fluid.AstroCraftFluids;
 import com.cubikore.astro.client.input.AstroCraftKeyBinds;
 import com.cubikore.astro.command.AstroCraftCommands;
-import com.cubikore.astro.game.server.AstroCraftServerGameManager;
+import com.cubikore.astro.game.server.AstroCraftGameManager;
 import com.cubikore.astro.item.AstroCraftArmorMaterials;
 import com.cubikore.astro.item.AstroCraftItems;
 import com.cubikore.astro.networking.AstroCraftNetworking;
@@ -14,7 +14,6 @@ import com.cubikore.astro.world.worldgen.AstroCraftChunkGenerators;
 import com.google.gson.Gson;
 import net.fabricmc.api.ModInitializer;
 
-import net.minecraft.client.render.RenderLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +24,7 @@ public class AstroCraft implements ModInitializer {
 
     public static Gson gson = new Gson();
 
-    public static AstroCraftServerGameManager serverGameManager = new AstroCraftServerGameManager();
+    public static AstroCraftGameManager gameManager = new AstroCraftGameManager();
 
 	@Override
 	public void onInitialize() {
@@ -43,6 +42,6 @@ public class AstroCraft implements ModInitializer {
         AstroCraftChunkGenerators.registerChunkGenerators();
         AstroCraftCommands.registerCommands();
 
-        serverGameManager.init();
+        gameManager.init();
 	}
 }

@@ -71,6 +71,8 @@ public class AstroCraftShip {
     }
 
     public static void toggleAutoThrust() {
+        System.out.println(autoThrust);
         autoThrust = !autoThrust;
+        System.out.println(autoThrust);
     }
 }

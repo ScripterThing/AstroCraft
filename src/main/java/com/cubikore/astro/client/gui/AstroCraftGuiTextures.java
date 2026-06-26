@@ -16,6 +16,7 @@ public class AstroCraftGuiTextures {
     public static Identifier SUN_SPRITE = Identifier.of(AstroCraft.MOD_ID, "sun");
 
     public static Identifier PLANET_SELECT_SPRITE = Identifier.of(AstroCraft.MOD_ID, "planet_selected");
+    public static Identifier PLANET_SELECT_SPRITE_Y = Identifier.of(AstroCraft.MOD_ID, "planet_selected_y");
 
     public static Identifier SATURN_RING_SPRITE = Identifier.of(AstroCraft.MOD_ID, "saturn_ring");
     public static Identifier URANUS_RING_SPRITE = Identifier.of(AstroCraft.MOD_ID, "uranus_ring");
