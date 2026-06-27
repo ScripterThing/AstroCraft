@@ -1,15 +1,18 @@
 package com.cubikore.astro.client.renderer;
 
+import com.cubikore.astro.block.fluid.AstroCraftFluids;
 import com.cubikore.astro.client.input.AstroCraftKeyBinds;
 import com.cubikore.astro.texture.AstrocraftTextures;
 import com.cubikore.astro.util.EntityUtils;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.text.Text;
@@ -41,13 +44,25 @@ public class AstroCraftHudRenderer {
         if(player != null) {
             if(EntityUtils.wearingSpaceSuit(player, EquipmentSlot.HEAD))
                 renderHelmetHud(context, tickCounter, client);
+
+            context.drawText(textRenderer, Text.literal("FPS: " + client.getCurrentFps()), 20, 80, 0xffffffff, false);
         }
     }
 
     private void renderVignetteOverlay(DrawContext context, MinecraftClient client) {
         ClientPlayerEntity player = client.player;
 
-        if(player != null && !EntityUtils.wearingSpaceSuit(player, EquipmentSlot.HEAD) || !client.options.getPerspective().isFirstPerson())
+        if(player == null)
+            return;
+
+        Camera camera = astroCraftRenderer.getCamera();
+
+        if(camera.getSubmersionType().equals(CameraSubmersionType.WATER) && player.getWorld().getBlockState(camera.getBlockPos()).isOf(AstroCraftFluids.SULFURIC_ACID)) {
+            client.gameRenderer.renderBlur(1);
+            client.getFramebuffer().beginWrite(false);
+        }
+
+        if(!EntityUtils.wearingSpaceSuit(player, EquipmentSlot.HEAD) || !client.options.getPerspective().isFirstPerson())
             return;
 
         RenderSystem.disableDepthTest();

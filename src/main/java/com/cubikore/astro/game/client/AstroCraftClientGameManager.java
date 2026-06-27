@@ -153,7 +153,7 @@ public class AstroCraftClientGameManager {
     }
 
     private void handleFlashlight(MinecraftClient client, PlayerEntity player) {
-        if(AstroCraftUtil.timePassed(lastPressed) > 0.3f) {
+        //if(AstroCraftUtil.timePassed(lastPressed) > 0.3f) {
             if(AstroCraftKeyBinds.FLASHLIGHT_KEY.wasPressed()) {
                 capturePressed();
                 ClientPlayNetworking.send(new PlayerFlashlightPayload(player.getUuid(), true));
@@ -165,7 +165,7 @@ public class AstroCraftClientGameManager {
                 capturePressed();
                 openCustomizationScreen(client);
             }
-        }
+        //}
     }
 
     private void capturePressed() {

@@ -137,6 +137,7 @@ uniform sampler2D ParticlesSampler;
 uniform sampler2D ParticlesDepthSampler;
 uniform sampler2D UnlitDepthSampler;
 
+uniform int shouldRender;
 uniform int inSpace;
 uniform float brightness;
 uniform vec3 lightColor;
@@ -283,7 +284,8 @@ void main() {
     float depth = texture(DepthSampler, texCoord).r;
     vec3 viewPos = screenToViewSpace(texCoord, depth).xyz;
 
-    color = getShadow(color, texCoord, viewPos, normal, shadowViewMatrix, shadowOrthographMatrix, NoiseTex, ShadowDepthSampler, depth);
+    if(shouldRender == 1)
+        color = getShadow(color, texCoord, viewPos, normal, shadowViewMatrix, shadowOrthographMatrix, NoiseTex, ShadowDepthSampler, depth);
 
     fragColor = color;
 }

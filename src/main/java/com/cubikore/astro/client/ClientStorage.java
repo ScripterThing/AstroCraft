@@ -34,4 +34,6 @@ public class ClientStorage {
     public static float[] sunBrightness = new float[]{1f};
 
     public static boolean renderingFpsHand = false;
+
+    public static boolean renderEffects = true;
 }

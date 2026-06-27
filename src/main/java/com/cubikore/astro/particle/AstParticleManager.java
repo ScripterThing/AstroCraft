@@ -148,9 +148,9 @@ public class AstParticleManager {
 
                 float skyBrightness = Math.max(light / 15.0f, 0.1f);
 
-                int r = (int) (particleEmitter.r * skyBrightness);
-                int g = (int) (particleEmitter.g * skyBrightness);
-                int b = (int) (particleEmitter.b * skyBrightness);
+                int r = (int) (particleEmitter.r );
+                int g = (int) (particleEmitter.g );
+                int b = (int) (particleEmitter.b );
 
                 Sprite sprite = atlasTexture.getSprite(particleEmitter.getSprite());
 

@@ -7,8 +7,8 @@ import com.cubikore.astro.client.light.SpotLight;
 import com.cubikore.astro.client.renderer.AstroCraftRenderer;
 import com.cubikore.astro.client.renderer.ShadowRenderer;
 import com.cubikore.astro.dimension.DimensionKeys;
-import com.cubikore.astro.editor.InfoEditor;
-import com.cubikore.astro.editor.PlanetEditor;
+import com.cubikore.astro.client.editor.InfoEditor;
+import com.cubikore.astro.client.editor.PlanetEditor;
 import com.cubikore.astro.game.client.AstroCraftClientGameManager;
 import com.cubikore.astro.universe.Planet;
 import com.cubikore.astro.universe.Universe;
@@ -16,7 +16,6 @@ import com.cubikore.astro.weather.planet.ClientWeather;
 import foundry.veil.api.client.editor.EditorManager;
 import foundry.veil.api.client.registry.LightTypeRegistry;
 import foundry.veil.api.client.render.VeilRenderSystem;
-import foundry.veil.api.client.render.light.data.AreaLightData;
 import foundry.veil.api.client.render.light.data.PointLightData;
 import foundry.veil.api.client.render.light.renderer.LightRenderHandle;
 import foundry.veil.api.client.render.post.PostProcessingManager;
@@ -87,6 +86,7 @@ public class AstroCraftPostProcessingManager {
 
                     if (shadowsShader != null) {
                         //shadowsShader.getUniform("lightViewProjection").setMatrix(ShadowRenderer.getLightViewProjection());
+                        shadowsShader.getUniformSafe("shouldRender").setInt(ClientStorage.renderEffects ? 1 : 0);
                         shadowsShader.getUniformSafe("inSpace").setInt(inSpace ? 1 : 0);
                         shadowsShader.getUniformSafe("shadowViewMatrix").setMatrix(ShadowRenderer.shadowModelView(camera).peek().getPositionMatrix());
                         shadowsShader.getUniformSafe("shadowSpaceMatrix").setMatrix(ShadowRenderer.getLightSpaceMatrix());
@@ -100,7 +100,7 @@ public class AstroCraftPostProcessingManager {
                     ShaderProgram planetFogShader = context.getShader(PLANET_FOG_ID);
 
                     if (planetFogShader != null && weather != null) {
-                        planetFogShader.getUniformSafe("shouldRender").setInt(weather.currentAtmosphereConditions.hasFog ? 1 : 0);
+                        planetFogShader.getUniformSafe("shouldRender").setInt(weather.currentAtmosphereConditions.hasFog && ClientStorage.renderEffects ? 1 : 0);
 
                         planetFogShader.getUniformSafe("lightDarkFactor").setFloat(weather.currentAtmosphereConditions.lightDarkFactor);
 
@@ -179,7 +179,7 @@ public class AstroCraftPostProcessingManager {
                     ShaderProgram planetSkyShader = context.getShader(PLANET_SKY_ID);
 
                     if (planetSkyShader != null && weather != null) {
-                        planetSkyShader.getUniformSafe("shouldRender").setInt(inSpace ? 0 : 1);
+                        planetSkyShader.getUniformSafe("shouldRender").setInt(inSpace && ClientStorage.renderEffects ? 0 : 1);
 
                         planetSkyShader.getUniformSafe("sunSize").setFloat(weather.currentAtmosphereConditions.sunSize);
                         planetSkyShader.getUniformSafe("sunWhiteSize").setFloat(weather.currentAtmosphereConditions.sunWhiteSize);
@@ -194,7 +194,7 @@ public class AstroCraftPostProcessingManager {
                     ShaderProgram atmosphereShader = context.getShader(ATMOSPHERE_SHADER);
 
                     if (starsShader != null) {
-                        starsShader.getUniformSafe("shouldRender").setInt(inSpace ? 1 : 0);
+                        starsShader.getUniformSafe("shouldRender").setInt(inSpace && ClientStorage.renderEffects ? 1 : 0);
                         starsShader.getUniformSafe("yawOffset").setFloat(ClientStorage.renderedWorldOffset.w);
                         starsShader.getUniformSafe("gameTime").setFloat(gameTime);
                     }

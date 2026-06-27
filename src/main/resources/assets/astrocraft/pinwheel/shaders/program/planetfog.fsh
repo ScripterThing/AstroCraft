@@ -333,8 +333,11 @@ vec3 shadow(vec3 inColor, vec3 viewPos, vec3 fogColor, float depth, float rawDep
     vec3 ro = VeilCamera.CameraPosition + VeilCamera.CameraBobOffset;
     vec3 rd = viewDirFromUv(texCoord);
 
-    int numSteps = 256;
-    float maxDist = depth >= fogFactor ? fogFactor : depth;
+    float blend = smoothstep(18.0, 22.0, depth);
+
+    int numSteps = int(round(mix(50.0, 500.0, blend)));
+
+    float maxDist = mix(depth, fogFactor, blend);
     float stepDistance = maxDist / numSteps;
 
     float dist = 0.0;
@@ -343,13 +346,15 @@ vec3 shadow(vec3 inColor, vec3 viewPos, vec3 fogColor, float depth, float rawDep
 
     vec2 si = vec2(textureSize(DiffuseSampler, 0));
     float noise = IGN(texCoord * si);
-    float t = noise * stepDistance;
 
-    for(int i = 0; i < numSteps; i++) {
+    float noise22 = fract(sin(dot(texCoord, vec2(12.9898,78.233))) * 43758.5453);
+
+    float rayOffset = noise22 * stepDistance;
+
+    for(float t = rayOffset; t < maxDist; t += stepDistance) {
         vec3 rp = ro + rd * t;
-        dist += stepDistance;
 
-        if(dist >= depth) {
+        if(t >= depth) {
             break;
         }
 
@@ -358,7 +363,7 @@ vec3 shadow(vec3 inColor, vec3 viewPos, vec3 fogColor, float depth, float rawDep
         float shadowDepth = shadowScreenSpace.z;
         float shadowSampler = texture(ShadowDepthSampler, shadowScreenSpace.xy).r;
 
-        float density = dist / fogFactor;
+        float density = t / fogFactor;
 
         float shadow = shadowDepth < shadowSampler ? 1.0 : 0.0;
 

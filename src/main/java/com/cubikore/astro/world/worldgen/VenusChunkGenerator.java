@@ -82,45 +82,53 @@ public class VenusChunkGenerator extends ChunkGenerator {
 
     @Override
     public CompletableFuture<Chunk> populateNoise(Blender blender, NoiseConfig noiseConfig, StructureAccessor structureAccessor, Chunk chunk) {
+        BlockPos.Mutable currPos = new BlockPos.Mutable();
         BlockPos.Mutable pos = new BlockPos.Mutable();
+        BlockPos.Mutable heightPos = new BlockPos.Mutable();
 
         int startY = chunk.getBottomY();
         int endY = chunk.getTopY();
-        int baseHeight = 64;
+        int baseHeight = startY + 100;
 
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                pos.set(x, 0, z);
-                generate(pos, chunk, startY, endY, baseHeight);
+                currPos.set(x, baseHeight, z);
+
+                float frequency1 = 0.001f;
+
+                double noise1 = perlinNoiseSampler.sample(
+                        (chunk.getPos().x * 16 + x) * frequency1,
+                        (chunk.getPos().z * 16 + z) * frequency1,
+                        0
+                ) * 100;
+
+                int height = (int) (baseHeight + noise1);
+
+                generatePatches(pos, chunk, startY, height);
+
+                pos.set(x, height, z);
+
+                chunk.setBlockState(pos, AstroCraftBlocks.VENUSIAN_SAND_BLOCK.getDefaultState(), false);
+
+                for(int y = startY; y < height; y++) {
+                    heightPos.set(x, y, z);
+
+                    chunk.setBlockState(heightPos, AstroCraftBlocks.VENUSIAN_BASALT_BLOCK.getDefaultState(), false);
+                }
+
+                generateCaves(currPos, chunk, startY, height);
+
+                for(int y = startY; y < 6; y++) {
+                    heightPos.set(x, y, z);
+
+                    if(chunk.getBlockState(heightPos).isAir()) {
+                        chunk.setBlockState(heightPos, AstroCraftFluids.SULFURIC_ACID.getDefaultState(), false);
+                    }
+                }
             }
         }
 
         return CompletableFuture.completedFuture(chunk);
-    }
-
-    private void generate(BlockPos pos, Chunk chunk, int startY, int endY, int baseHeight) {
-        int height = generateSurface(pos, chunk, startY);
-
-        generatePatches(pos, chunk, startY, height);
-
-        generateCaves(pos, chunk, startY, height);
-
-        int x = pos.getX();
-        int z = pos.getZ();
-
-        BlockPos.Mutable heightPos = new BlockPos.Mutable();
-
-        for(int y = startY + 50; y <= 3; y++) {
-            heightPos.set(x, y, z);
-
-            if(chunk.getBlockState(heightPos).isAir()) {
-                chunk.setBlockState(
-                        heightPos,
-                        AstroCraftFluids.SULFURIC_ACID.getDefaultState(),
-                        false
-                );
-            }
-        }
     }
 
     private void generateCaves(BlockPos pos, Chunk chunk, int startY, int height) {
@@ -129,10 +137,10 @@ public class VenusChunkGenerator extends ChunkGenerator {
 
         BlockPos.Mutable heightPos = new BlockPos.Mutable();
 
-        for (int y = startY + 50; y <= height; y++) {
+        for (int y = startY + 3; y <= height - 20; y++) {
             heightPos.set(x, y, z);
 
-            float frequency = 0.03f;
+            float frequency = 0.008f;
 
             double caveNoise = simplexNoiseSampler.sample(
                     (chunk.getPos().x * 16 + x) * frequency,
@@ -142,9 +150,9 @@ public class VenusChunkGenerator extends ChunkGenerator {
             caveNoise = caveNoise * 0.5 + 0.5;
 
             double caveNoise2 = perlinNoiseSampler.sample(
-                    (chunk.getPos().x * 16 + x) * 0.03,
+                    (chunk.getPos().x * 16 + x) * frequency,
                     y * 0.03,
-                    (chunk.getPos().z * 16 + z) * 0.03
+                    (chunk.getPos().z * 16 + z) * frequency
             );
 
             if(caveNoise > 0.5 && caveNoise2 < 0.6) {
@@ -163,7 +171,7 @@ public class VenusChunkGenerator extends ChunkGenerator {
 
         BlockPos.Mutable heightPos = new BlockPos.Mutable();
 
-        for (int y = startY; y <= height; y++) {
+        for (int y = startY; y <= height - 3; y++) {
             heightPos.set(x, y, z);
 
             float frequency = 0.01f;
@@ -174,7 +182,7 @@ public class VenusChunkGenerator extends ChunkGenerator {
                     (chunk.getPos().z * 16 + z) * frequency
             );
 
-            if(patchNoise > 0.5) {
+            if(patchNoise > 0.9) {
                 chunk.setBlockState(
                         heightPos,
                         AstroCraftBlocks.IRON_OXIDE_BLOCK.getDefaultState(),
@@ -201,61 +209,6 @@ public class VenusChunkGenerator extends ChunkGenerator {
         }
     }
 
-    private int generateSurface(BlockPos pos, Chunk chunk, int startY) {
-        int x = pos.getX();
-        int z = pos.getZ();
-
-        BlockPos.Mutable heightPos = new BlockPos.Mutable();
-
-        float frequency1 = 0.01f;
-
-        float mountainDetFrequency = 0.0001f;
-        float mountainFrequency = 0.00001f;
-
-        double noise1 = perlinNoiseSampler.sample(
-                (chunk.getPos().x * 16 + x) * frequency1,
-                (chunk.getPos().z * 16 + z) * frequency1,
-                0
-        );
-
-        double mountainDet = mountainDetNoiseSampler.sample(
-                (chunk.getPos().x * 16 + x) * mountainDetFrequency,
-                (chunk.getPos().z * 16 + z) * mountainDetFrequency,
-                0
-        );
-
-        double mountainNoise = mountainNoiseSampler.sample(
-                (chunk.getPos().x * 16 + x) * mountainFrequency,
-                (chunk.getPos().z * 16 + z) * mountainFrequency,
-                0
-        );
-
-        mountainNoise = (mountainNoise - 0.5);
-
-        int mountainHeight = (int)Math.round((((mountainNoise * 40) + 80) * 2) * mountainDet);
-
-        int height2 = (int)Math.round(((noise1 * 40) + 80) / 2.0f);
-
-        int height = height2 + mountainHeight + 64;
-
-        heightPos.set(x, height, z);
-
-        chunk.setBlockState(heightPos,
-                AstroCraftBlocks.VENUSIAN_SAND_BLOCK.getDefaultState(),
-                false);
-
-        for(int y = startY; y <= height - 1; y++) {
-            heightPos.set(x, y, z);
-            chunk.setBlockState(
-                    heightPos,
-                    AstroCraftBlocks.VENUSIAN_BASALT_BLOCK.getDefaultState(),
-                    false
-            );
-        }
-
-        return height;
-    }
-
     @Override
     public int getSeaLevel() {
         return 64;
@@ -263,12 +216,12 @@ public class VenusChunkGenerator extends ChunkGenerator {
 
     @Override
     public int getMinimumY() {
-        return -64;
+        return 0;
     }
 
     @Override
     public int getHeight(int x, int z, Heightmap.Type heightmap, HeightLimitView world, NoiseConfig noiseConfig) {
-        return 384;
+        return 256;
     }
 
     @Override
